@@ -1,0 +1,12 @@
+{
+  "name": "isoteh",
+  "private": true,
+  "type": "module",
+  "description": "A modern, self-hosted ad server for websites, newsletters, chat apps and games. No dependencies: Node 22 only.",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node --experimental-sqlite --disable-warning=ExperimentalWarning server.mjs",
+    "demo": "node --experimental-sqlite --disable-warning=ExperimentalWarning tools/demo-data.mjs",
+    "test": "node --experimental-sqlite --disable-warning=ExperimentalWarning --test test/*.test.mjs"
+  }
+}

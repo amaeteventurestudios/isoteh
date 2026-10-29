@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Austin Eats: backyard brisket without a smoker</title>
+<meta name="keywords" content="food, austin, bbq, recipes, grill">
+<style>
+:root { --paper:#fffaf3; --ink:#262019; --muted:#7a6e60; --line:#eadfce; --accent:#a8361a; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --paper:#17130f; --ink:#f3ebe0; --muted:#a99c8c; --line:#352d25; --accent:#f08a5d; color-scheme: dark; } }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--paper); color:var(--ink); font:18px/1.65 Georgia, "Times New Roman", serif; }
+header { border-bottom:1px solid var(--line); padding:14px 16px; font:700 20px system-ui, sans-serif; }
+header span { color:var(--accent); }
+.wrap { max-width:1060px; margin:0 auto; padding:24px 16px; display:grid; gap:36px; grid-template-columns:1fr; }
+@media (min-width:900px) { .wrap { grid-template-columns:1fr 300px; } }
+h1 { font-size:clamp(28px, 6vw, 44px); line-height:1.15; margin:0 0 8px; }
+.by { color:var(--muted); font:15px system-ui, sans-serif; margin:0 0 24px; }
+aside { font:15px system-ui, sans-serif; }
+aside h3 { margin:28px 0 8px; font-size:15px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+.slot { margin:28px 0; }
+</style></head>
+<body>
+<header>Austin <span>Eats</span></header>
+<div class="wrap">
+  <article>
+    <h1>Backyard brisket without a smoker, just a kettle grill and patience</h1>
+    <p class="by">By Jess Ramirez · 7 minutes to read</p>
+    <p>Good Texas brisket starts with the rub, and the rub is almost nothing: coarse black pepper and kosher salt, half and half, with a little garlic if your family argues about it. Trim the fat cap to a quarter inch so the smoke can reach the meat.</p>
+    <p>Set the kettle up for indirect heat: coals banked on one side, a pan of water under the meat on the other, and two chunks of post oak on the fire. Aim for 250°F at the lid and resist opening it.</p>
+    <div class="slot" data-isoteh="" id="inline"></div>
+    <p>Around 165°F the stall hits and the temperature stops climbing for hours. Wrap it tight in butcher paper and let it push through. Pull it at 203°F, when a probe slides in like butter.</p>
+    <p>Rest it in a dry cooler for at least an hour, then slice against the grain, pencil-thick. White bread, pickles, onions, and something cold to drink.</p>
+  </article>
+  <aside>
+    <h3>Advertisement</h3>
+    <div data-isoteh="" id="sidebar" style="max-width:300px;aspect-ratio:300/250"></div>
+    <h3>Popular</h3>
+    <p>Breakfast tacos ranked, again</p><p>Where to eat on East Sixth this month</p><p>Queso, three ways</p>
+  </aside>
+</div>
+<script type="module">
+  const ids = await (await fetch('/demo/ids.json')).json();
+  document.getElementById('sidebar').dataset.isoteh = ids.sidebar;
+  document.getElementById('inline').dataset.isoteh = ids.inline;
+  const s = document.createElement('script'); s.src = '/s/isoteh.js'; s.async = true; document.body.append(s);
+</script>
+</body></html>

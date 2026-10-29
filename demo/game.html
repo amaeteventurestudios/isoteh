@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Billboard in a racing game</title>
+<style>
+html, body { margin:0; height:100%; overflow:hidden; background:#9fc6e4; font:14px/1.4 system-ui, sans-serif; }
+canvas { display:block; width:100%; height:100%; touch-action:none; }
+.hud { position:fixed; left:12px; top:12px; right:12px; display:flex; gap:8px; flex-wrap:wrap; pointer-events:none; }
+.hud div { background:rgba(20,18,16,.78); color:#f2ece4; padding:6px 10px; border-radius:8px; }
+.hud b { color:#ffcf6b; }
+.hint { position:fixed; bottom:12px; left:0; right:0; text-align:center; color:#fff; text-shadow:0 1px 2px #000; pointer-events:none; }
+</style>
+<script type="importmap">{ "imports": { "three": "/demo/vendor/three/three.module.min.js" } }</script>
+</head>
+<body>
+<div class="hud"><div>Visible <b id="v">0%</b></div><div>Screen <b id="s">0%</b></div><div>Angle <b id="a">0°</b></div><div>View counted: <b id="c">not yet</b></div></div>
+<div class="hint">The car laps the track. Tap the board to visit the sponsor.</div>
+<script type="module">
+  import * as THREE from 'three';
+  import { AdBoard } from '/s/isoteh-three.mjs';
+  const ids = await (await fetch('/demo/ids.json')).json();
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: devicePixelRatio < 2 });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  document.body.prepend(renderer.domElement);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x9fc6e4);
+  scene.fog = new THREE.Fog(0x9fc6e4, 60, 160);
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 400);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x6a7d4a, 1.2));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(30, 50, 20); scene.add(sun);
+
+  // ground, an oval track, kerbs
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshLambertMaterial({ color: 0x6f9a4a }));
+  ground.rotation.x = -Math.PI / 2; scene.add(ground);
+  const R = 34, track = new THREE.Mesh(new THREE.RingGeometry(R - 5, R + 5, 96), new THREE.MeshLambertMaterial({ color: 0x3b3a39 }));
+  track.rotation.x = -Math.PI / 2; track.position.y = 0.02; track.scale.set(1.6, 1, 1); scene.add(track);
+  const city = new THREE.Group();
+  for (let i = 0; i < 26; i++) {
+    const h = 6 + Math.random() * 22, b = new THREE.Mesh(new THREE.BoxGeometry(6, h, 6), new THREE.MeshLambertMaterial({ color: [0xd8cbb8, 0xc9a98a, 0xe8e0d2, 0xb7b9bf][i % 4] }));
+    const ang = (i / 26) * Math.PI * 2 + 0.1; b.position.set(Math.cos(ang) * 92, h / 2, Math.sin(ang) * 66); city.add(b);
+  }
+  // a stand in front of part of the board, so the hidden check has something to do
+  const stand = new THREE.Mesh(new THREE.BoxGeometry(6, 3.2, 2), new THREE.MeshLambertMaterial({ color: 0x8a5a3c }));
+  stand.position.set(R * 1.6 + 7, 1.6, -5); city.add(stand);
+  scene.add(city);
+
+  // the billboard by the main straight
+  const board = new AdBoard(THREE, { server: location.origin, slot: ids.game, width: 16, height: 8, keywords: 'racing' });
+  board.mesh.position.set(R * 1.6 + 14, 7, 0);   // at the end of the straight, facing the cars as they arrive
+  board.mesh.rotation.y = -Math.PI / 2;
+  scene.add(board.mesh);
+  const posts = new THREE.MeshLambertMaterial({ color: 0x444444 });
+  for (const z of [-6, 6]) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 7), posts); p.position.set(R * 1.6 + 14.2, 3.5, z); scene.add(p); }
+
+  // the car
+  const car = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.BoxGeometry(2, 0.6, 4), new THREE.MeshLambertMaterial({ color: 0xc34218 })); body.position.y = 0.6; car.add(body);
+  const cab = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.5, 1.4), new THREE.MeshLambertMaterial({ color: 0x1d1b19 })); cab.position.set(0, 1.1, -0.2); car.add(cab);
+  scene.add(car);
+
+  function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w < h ? 78 : 60; camera.updateProjectionMatrix(); }
+  addEventListener('resize', resize); resize();
+
+  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  renderer.domElement.addEventListener('pointerup', (e) => {
+    ptr.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    if (board.hit(ray)) board.open();
+  });
+
+  const $ = (id) => document.getElementById(id);
+  let t = 0, last = performance.now();
+  function loop(now) {
+    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    t += reduce ? dt * 0.25 : dt * 0.45;
+    const x = Math.cos(t) * R * 1.6, z = Math.sin(t) * R;
+    car.position.set(x, 0, z);
+    const nx = Math.cos(t + 0.01) * R * 1.6, nz = Math.sin(t + 0.01) * R;
+    car.lookAt(nx, 0, nz);
+    // chase camera behind the car
+    const back = new THREE.Vector3(x - nx, 0, z - nz).normalize().multiplyScalar(9);
+    camera.position.set(x + back.x, 4.2, z + back.z);
+    camera.lookAt(x + (nx - x) * 900, 2.5, z + (nz - z) * 900);
+    const on = board.update(camera, renderer, dt, { occluders: [city] });
+    $('v').textContent = `${Math.round(board.state.visible * 100)}%`;
+    $('s').textContent = `${(board.state.share * 100).toFixed(1)}%`;
+    $('a').textContent = `${Math.round(board.state.angle)}°`;
+    $('c').textContent = board.counted ? 'yes' : on ? 'watching…' : 'not yet';
+    renderer.render(scene, camera);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  window.__demo = { board, setT: (v) => { t = v; } };
+</script>
+</body></html>
