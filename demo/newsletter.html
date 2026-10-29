@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Accra Brief, as an inbox shows it</title>
+<style>
+body { margin:0; background:#e9e6e1; font:16px/1.55 system-ui, sans-serif; color:#222; }
+.mail { max-width:640px; margin:0 auto; background:#fff; padding:20px; }
+.meta { font-size:13px; color:#666; border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:16px; }
+h1 { font:700 26px Georgia, serif; margin:0 0 4px; } h2 { font:700 19px Georgia, serif; margin:22px 0 4px; }
+.kit { max-width:640px; margin:24px auto; background:#fffdf9; border:1px dashed #c34218; border-radius:10px; padding:16px; }
+.kit img { max-width:100%; } code { font-size:13px; }
+@media (prefers-color-scheme: dark) { body { background:#111; } .kit { background:#1f1c19; color:#f2ece4; } }
+</style></head>
+<body>
+<div class="mail">
+  <div class="meta">From: The Accra Brief · To: you · Thursday morning</div>
+  <h1>The Accra Brief</h1>
+  <p style="color:#666">Five stories before your first trotro.</p>
+  <div id="ad"></div>
+  <h2>1. Port volumes up at Tema</h2><p>Container traffic rose again last month as new berths came into use…</p>
+  <h2>2. A new bus lane for Ring Road</h2><p>The city starts trials of a dedicated lane next week…</p>
+</div>
+<div class="kit">
+  <b>For Substack:</b> Substack doesn't run outside code, so the writer copies this ready-made block into the post.
+  <div id="kit" style="margin-top:12px"></div>
+</div>
+<script type="module">
+  const ids = await (await fetch('/demo/ids.json')).json();
+  const base = location.origin, s = ids.newsletter, issue = 'demo-issue';
+  // exactly the block the dashboard gives the writer, with ISSUE filled in
+  document.getElementById('ad').innerHTML = `<table role="presentation" width="100%" style="max-width:600px;margin:16px auto"><tr><td style="font:12px sans-serif;color:#777;padding-bottom:4px">Sponsored</td></tr>
+<tr><td><a href="${base}/e/${s}/c?i=${issue}"><img src="${base}/e/${s}.png?i=${issue}" width="600" alt="Sponsored" style="display:block;width:100%;height:auto;border:0"></a></td></tr></table>`;
+  const k = await (await fetch(`${base}/e/${s}/kit?i=${issue}`)).json();
+  const box = document.getElementById('kit');
+  if (k.image) {
+    const p = document.createElement('p'); p.style.cssText = 'font-size:12px;color:#777;margin:0 0 4px'; p.textContent = k.label; box.append(p);
+    const a = document.createElement('a'); a.href = k.link; const img = document.createElement('img'); img.src = k.image; img.alt = k.sponsor; a.append(img); box.append(a);
+    const c = document.createElement('p'); c.innerHTML = '<code></code>'; c.firstChild.textContent = `Link: ${k.link}`; box.append(c);
+  } else box.textContent = 'No sponsor this issue.';
+</script>
+</body></html>

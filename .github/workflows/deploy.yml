@@ -1,0 +1,44 @@
+# Tests every push; on main, sends the ad server to the shared server and installs it (deploy/install.sh).
+# Needs the repository secrets SERVER_HOST, SERVER_USER and SERVER_SSH_KEY (the same ones the games use).
+# Optional secrets: ISOTEH_ADMIN_EMAIL, ISOTEH_PAY_INSTRUCTIONS, PAYSTACK_SECRET_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET.
+# Optional variables: ADS_DOMAIN (e.g. ads.noveniqe.com, once its DNS points at the server), ISOTEH_BRAND.
+name: test and deploy
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm test
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && vars.DEPLOY_ENABLED == 'yes'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package
+        run: tar --exclude=.git --exclude=data --exclude=test -czf /tmp/isoteh.tgz .
+      - name: Send and install
+        env:
+          HOST: ${{ secrets.SERVER_HOST }}
+          USER: ${{ secrets.SERVER_USER }}
+          KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ADS_DOMAIN: ${{ vars.ADS_DOMAIN }}
+        run: |
+          install -m 600 /dev/null /tmp/key && printf '%s\n' "$KEY" > /tmp/key
+          {
+            echo "ISOTEH_BRAND=${{ vars.ISOTEH_BRAND }}"
+            echo "ISOTEH_ADMIN_EMAIL=${{ secrets.ISOTEH_ADMIN_EMAIL }}"
+            echo "ISOTEH_PAY_INSTRUCTIONS=${{ secrets.ISOTEH_PAY_INSTRUCTIONS }}"
+            echo "PAYSTACK_SECRET_KEY=${{ secrets.PAYSTACK_SECRET_KEY }}"
+            echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}"
+            echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}"
+          } > /tmp/isoteh-keys.env
+          S="ssh -i /tmp/key -o StrictHostKeyChecking=accept-new"
+          scp -i /tmp/key -o StrictHostKeyChecking=accept-new /tmp/isoteh.tgz /tmp/isoteh-keys.env deploy/install.sh "$USER@$HOST:/tmp/"
+          $S "$USER@$HOST" "HOST_IP=$HOST ADS_DOMAIN=$ADS_DOMAIN bash /tmp/install.sh"
+          rm -f /tmp/key /tmp/isoteh-keys.env

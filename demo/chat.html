@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jisst channel with a native card</title>
+<style>
+:root { --bg:#ece5dd; --me:#d9fdd3; --them:#fff; --ink:#111b21; --muted:#667781; --card:#fff; --accent:#0a7c66; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --bg:#0b141a; --me:#005c4b; --them:#202c33; --ink:#e9edef; --muted:#8696a0; --card:#202c33; --accent:#25d3a6; color-scheme: dark; } }
+* { box-sizing:border-box; }
+body { margin:0; font:15px/1.45 system-ui, sans-serif; color:var(--ink); background:#888; }
+.phone { max-width:420px; margin:0 auto; min-height:100vh; background:var(--bg); display:flex; flex-direction:column; }
+.bar { background:var(--accent); color:#fff; padding:12px 14px; font-weight:700; display:flex; justify-content:space-between; align-items:center; }
+.bar small { font-weight:400; opacity:.85; display:block; }
+.feed { padding:12px; display:flex; flex-direction:column; gap:8px; flex:1; }
+.msg { background:var(--them); padding:8px 10px; border-radius:8px; max-width:88%; box-shadow:0 1px 0 rgba(0,0,0,.08); }
+.msg b { color:var(--accent); font-size:13px; display:block; }
+.sp { background:var(--card); border-radius:12px; overflow:hidden; box-shadow:0 1px 0 rgba(0,0,0,.08); }
+.sp .lab { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding:8px 12px 0; }
+.sp .row { display:flex; gap:10px; padding:8px 12px 12px; }
+.sp img { width:64px; height:64px; border-radius:8px; object-fit:cover; flex:none; }
+.sp h4 { margin:0 0 2px; } .sp p { margin:0 0 8px; color:var(--muted); font-size:14px; }
+.sp button { font:inherit; font-weight:700; border:0; border-radius:999px; padding:6px 14px; background:var(--accent); color:#fff; cursor:pointer; }
+.switch { display:flex; gap:6px; padding:8px 12px; background:var(--card); }
+.switch button { flex:1; font:inherit; border:1px solid var(--muted); border-radius:999px; padding:6px; background:transparent; color:var(--ink); cursor:pointer; }
+.switch button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+.note { font-size:13px; color:var(--muted); text-align:center; padding:6px; }
+</style></head>
+<body><div class="phone">
+  <div class="switch"><button class="on" id="pub">Public channel</button><button id="dm">Private chat</button></div>
+  <div class="bar"><span id="title">Naija Football Talk<small>12,408 members · public channel</small></span></div>
+  <div class="feed" id="feed"></div>
+</div>
+<script type="module">
+  import { getNativeAd } from '/s/isoteh-native.mjs';
+  const ids = await (await fetch('/demo/ids.json')).json();
+  const feed = document.getElementById('feed'), title = document.getElementById('title');
+  const msg = (who, text) => { const d = document.createElement('div'); d.className = 'msg'; const b = document.createElement('b'); b.textContent = who; d.append(b, text); return d; };
+  async function draw(ctx) {
+    title.firstChild.textContent = ctx === 'private' ? 'Ngozi' : 'Naija Football Talk';
+    title.querySelector('small').textContent = ctx === 'private' ? 'private chat' : '12,408 members · public channel';
+    feed.replaceChildren(msg('Emeka', 'Did you see that goal last night?'), msg('Funmi', 'Best free kick of the season, no argument.'), msg('Agent · Grand Prix', 'Race reminder: Lagos round starts Saturday at 6pm.'));
+    const card = await getNativeAd({ server: location.origin, slot: ids.chat, keywords: 'football, chat', ctx });
+    if (!card) { const n = document.createElement('p'); n.className = 'note'; n.textContent = ctx === 'private' ? 'No ads in private chats, ever.' : 'No sponsor right now.'; feed.append(n); return; }
+    const el = document.createElement('div'); el.className = 'sp';
+    el.innerHTML = '<div class="lab"></div><div class="row"><img alt=""><div><h4></h4><p></p><button type="button"></button></div></div>';
+    el.querySelector('.lab').textContent = `${card.label} · ${card.sponsor}`;
+    el.querySelector('img').src = card.image; el.querySelector('h4').textContent = card.title;
+    el.querySelector('p').textContent = card.body; el.querySelector('button').textContent = card.cta;
+    el.querySelector('button').addEventListener('click', () => card.open());
+    feed.insertBefore(el, feed.children[2]);
+    new IntersectionObserver((es, io) => { if (es[0].intersectionRatio >= 0.5) setTimeout(() => { card.seen(); io.disconnect(); }, 1000); }, { threshold: 0.5 }).observe(el);
+  }
+  for (const [id, ctx] of [['pub', 'public'], ['dm', 'private']]) document.getElementById(id).addEventListener('click', (e) => {
+    document.querySelectorAll('.switch button').forEach((b) => b.classList.toggle('on', b === e.target)); draw(ctx);
+  });
+  draw('public');
+</script>
+</body></html>

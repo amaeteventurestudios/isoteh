@@ -1,0 +1,5 @@
+node_modules/
+data/
+data-test/
+.DS_Store
+demo/ids.json
