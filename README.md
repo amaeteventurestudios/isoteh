@@ -11,8 +11,8 @@ else plug into it as customers.
 
 - **Direct sales first.** Owners list ad slots with prices per day, week or post. Advertisers book, upload and pay up front.
   The money is held while the ad runs and paid to the owner automatically, less our fee (15% by default).
-- **Local money.** Prices in NGN, GHS, KES, ZAR and more. Paystack (cards, bank, USSD, mobile money), Stripe (cards), or a
-  bank transfer that staff confirm. Payouts by bank, mobile money or PayPal.
+- **US dollars and Stripe first.** Prices in USD by default, paid by card through Stripe, or by ACH or wire that staff
+  confirm. Other currencies work too (CAD, GBP, EUR and more), and Paystack covers African markets as an extra.
 - **No tracking.** Ads are picked by the page's topic and the visitor's country, never by following people. No cookies
   for visitors, and nothing stored about them.
 - **Honest numbers.** A view counts once, only when the ad was actually seen (half on screen for a second; in games, the

@@ -6,7 +6,7 @@ your terms." The shown brand comes from one setting (`ISOTEH_BRAND`, default Iso
 
 ## Why it exists
 Research in the project ("Ad server research: what's broken") found the same gap everywhere: people with an audience
-can't easily sell their own ads directly, get paid fast in local money, and keep their pages fast without tracking
+can't easily sell their own ads directly, get paid fast, and keep their pages fast without tracking
 readers. Revive is the biggest free ad server, but it is old PHP software under the GPL; unpatched copies were hacked to
 inject malicious ads. Google, Unity, AdMob and Substack each keep owners inside their own garden. No ad server covers
 websites, newsletters, apps and games in one place, and in-world game ads are sold only by closed companies.
@@ -30,9 +30,10 @@ websites, newsletters, apps and games in one place, and in-world game ads are so
 - **Review.** Every ad from a member waits for staff approval; any change sends it back. Ads are images or plain text.
 - **Dashboard** (`/app`): My places (with copy-and-paste code per slot), My ads, Bookings, Money, Reports, Staff
   (review queue, transfers to confirm, payouts, disputes, team roles) and Settings (API keys).
-- **Payments.** Manual transfer (staff confirm; set `ISOTEH_PAY_INSTRUCTIONS` to the account to pay into), Paystack
-  (`PAYSTACK_SECRET_KEY`; webhook `/hooks/paystack`) and Stripe (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`; webhook
-  `/hooks/stripe`, event `checkout.session.completed`). Webhooks check the signature and the amount.
+- **Payments.** The home market is the US: prices default to USD and Stripe is the main way to pay (`STRIPE_SECRET_KEY`,
+  `STRIPE_WEBHOOK_SECRET`; webhook `/hooks/stripe`, event `checkout.session.completed`). Manual ACH or wire transfers are
+  confirmed by staff (set `ISOTEH_PAY_INSTRUCTIONS` to the account to pay into). For African markets, Paystack
+  (`PAYSTACK_SECRET_KEY`; webhook `/hooks/paystack`). Webhooks check the signature and the amount.
 
 ## Inside
 | File | Job |
@@ -54,7 +55,7 @@ websites, newsletters, apps and games in one place, and in-world game ads are so
 | `demo/` | A food blog, a newsletter, a Jisst channel and a racing game using the real SDKs |
 | `tools/demo-data.mjs`, `tools/grant.mjs`, `tools/png.mjs` | Demo data, giving a role from the shell, drawing PNGs |
 
-Money: whole minor units (kobo, cents) with an ISO currency; never a hard-coded symbol. Every ledger movement is a set
+Money: whole minor units (cents) with an ISO currency; never a hard-coded symbol. Every ledger movement is a set
 of rows that sums to zero across accounts (people's ids plus `escrow`, `platform`, `payouts_pending`, `outside`); the
 tests check the whole ledger sums to zero.
 
@@ -69,7 +70,8 @@ server. In production nobody becomes administrator by signing up first: set the 
 ## Not done yet (next steps)
 1. A domain (then the variable `ADS_DOMAIN`).
 2. A repository, then deploy.
-3. Paystack Transfers for automatic payouts (today staff send payouts by hand and press Sent).
+3. Stripe Connect for automatic US payouts (today staff send payouts by hand and press Sent); Paystack Transfers later
+   for African markets.
 4. Prebid (Apache 2.0) to fill unsold slots from outside ad exchanges.
 5. Sign in with Noveniqe (Core) as a second way in, so Jisst and the games share accounts.
 6. Unity and Godot packages (the JSON API and rules already work for any engine).

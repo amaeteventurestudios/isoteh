@@ -2,7 +2,7 @@
 // fetches it and reports what happened. Rules the server also enforces: nothing in private chats (pass ctx: 'private'
 // and you always get null), and the app must show the label it is given ("Sponsored").
 //
-//   const card = await getNativeAd({ server, slot, keywords: 'football, lagos' });
+//   const card = await getNativeAd({ server, slot, keywords: 'basketball, austin' });
 //   if (card) { draw(card); /* after one second on screen: */ card.seen(); /* on tap: */ card.open(); }
 
 export async function getNativeAd({ server, slot, keywords = '', ctx = 'public', fetchFn = globalThis.fetch } = {}) {

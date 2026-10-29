@@ -25,7 +25,7 @@ body { margin:0; font:15px/1.45 system-ui, sans-serif; color:var(--ink); backgro
 </style></head>
 <body><div class="phone">
   <div class="switch"><button class="on" id="pub">Public channel</button><button id="dm">Private chat</button></div>
-  <div class="bar"><span id="title">Naija Football Talk<small>12,408 members · public channel</small></span></div>
+  <div class="bar"><span id="title">Hoops Talk<small>12,408 members · public channel</small></span></div>
   <div class="feed" id="feed"></div>
 </div>
 <script type="module">
@@ -34,10 +34,10 @@ body { margin:0; font:15px/1.45 system-ui, sans-serif; color:var(--ink); backgro
   const feed = document.getElementById('feed'), title = document.getElementById('title');
   const msg = (who, text) => { const d = document.createElement('div'); d.className = 'msg'; const b = document.createElement('b'); b.textContent = who; d.append(b, text); return d; };
   async function draw(ctx) {
-    title.firstChild.textContent = ctx === 'private' ? 'Ngozi' : 'Naija Football Talk';
+    title.firstChild.textContent = ctx === 'private' ? 'Sam' : 'Hoops Talk';
     title.querySelector('small').textContent = ctx === 'private' ? 'private chat' : '12,408 members · public channel';
-    feed.replaceChildren(msg('Emeka', 'Did you see that goal last night?'), msg('Funmi', 'Best free kick of the season, no argument.'), msg('Agent · Grand Prix', 'Race reminder: Lagos round starts Saturday at 6pm.'));
-    const card = await getNativeAd({ server: location.origin, slot: ids.chat, keywords: 'football, chat', ctx });
+    feed.replaceChildren(msg('Chris', 'Did you see that buzzer beater last night?'), msg('Dana', 'Best finish of the season, no argument.'), msg('Agent · Grand Prix', 'Race reminder: the next round starts Saturday at 6pm ET.'));
+    const card = await getNativeAd({ server: location.origin, slot: ids.chat, keywords: 'basketball, chat', ctx });
     if (!card) { const n = document.createElement('p'); n.className = 'note'; n.textContent = ctx === 'private' ? 'No ads in private chats, ever.' : 'No sponsor right now.'; feed.append(n); return; }
     const el = document.createElement('div'); el.className = 'sp';
     el.innerHTML = '<div class="lab"></div><div class="row"><img alt=""><div><h4></h4><p></p><button type="button"></button></div></div>';

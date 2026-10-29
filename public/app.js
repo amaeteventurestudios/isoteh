@@ -1,7 +1,7 @@
 // The dashboard and public pages, in one small app with no framework. Pages: / (about), /market, /book/<slot>,
 // /app (places, ads, bookings, money, reports, staff, settings) and /app/pay/<ref>.
 const $main = document.getElementById('main');
-let S = { me: null, brand: 'Isoteh', providers: ['manual'], currencies: ['NGN'], feeBps: 1500, releaseDays: 3, publicUrl: location.origin };
+let S = { me: null, brand: 'Isoteh', providers: ['manual'], currencies: ['USD'], feeBps: 1500, releaseDays: 3, publicUrl: location.origin };
 
 // ---- theme ----
 const root = document.documentElement;
@@ -61,7 +61,7 @@ function busy(btn, fn) {
 }
 function field(label, input, hint) { return h('label', {}, label, hint ? h('span', { class: 'hint' }, ` ${hint}`) : null, input); }
 const sel = (name, opts, value) => h('select', { name }, Object.entries(opts).map(([v, t]) => h('option', { value: v, selected: v === value }, t)));
-const curSel = (name = 'currency', value = 'NGN') => sel(name, Object.fromEntries(S.currencies.map((c) => [c, c])), value);
+const curSel = (name = 'currency', value = 'USD') => sel(name, Object.fromEntries(S.currencies.map((c) => [c, c])), value);
 const fileToB64 = (file) => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = no; r.readAsDataURL(file); });
 async function copy(text, btn) { try { await navigator.clipboard.writeText(text); btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); } catch { /* select instead */ } }
 
@@ -94,7 +94,7 @@ function landing() {
   show(
     h('section', { class: 'hero' },
       h('h1', {}, 'Advertising on your terms.'),
-      h('p', { class: 'lead' }, `${S.brand} lets anyone with an audience sell ads directly: websites and blogs, newsletters, apps and chat channels, games, and creators. Advertisers book and pay up front, owners are paid automatically, in their own currency. Ads are picked by what the page is about, never by following people.`),
+      h('p', { class: 'lead' }, `Sell ads directly on your blog, newsletter, app, game or channel. You set the price, you approve every advertiser, and you keep 85%. Advertisers pay before the ad runs, so you never chase an invoice. No tracking cookies, so your pages stay fast and your readers stay private.`),
       h('div', { class: 'row' }, h('a', { class: 'btn', href: '/market' }, 'Find ad space'), h('a', { class: 'btn ghost', href: '/app' }, 'Sell your space'))),
     h('div', { class: 'surfaces' },
       [['Websites and blogs', 'One line of code, WordPress or Ghost. Space is kept free while the ad loads, so pages stay fast and steady.'],
@@ -106,7 +106,7 @@ function landing() {
     h('h2', {}, 'How it works'),
     h('ol', { class: 'steps' },
       h('li', {}, h('b', {}, 'List your space. '), 'Add your site, newsletter, app, game or channel, set prices per day, week or post, and paste the code we give you.'),
-      h('li', {}, h('b', {}, 'Advertisers book and pay. '), 'They pick dates, upload the ad and pay by card, bank, USSD or mobile money. You can approve each booking first. Every ad is checked before it runs.'),
+      h('li', {}, h('b', {}, 'Advertisers book and pay. '), 'They pick dates, upload the ad and pay by card or bank transfer. You can approve each booking first. Every ad is checked before it runs.'),
       h('li', {}, h('b', {}, 'You get paid. '), `The money is held while the ad runs and released to you when it ends (creator posts: ${S.releaseDays} days after posting, or sooner when the brand confirms). Our fee is ${S.feeBps / 100}%.`)),
     S.brand === 'Isoteh' ? h('p', { class: 'muted small', style: 'margin-top:24px' }, 'Isoteh (ee-shaw-teh) comes from the Yoruba word ìṣọtẹ̀, rebellion: a break from ad networks that set the rules, take the biggest cut and follow people around.') : null,
   );
@@ -114,8 +114,8 @@ function landing() {
 
 async function market() {
   const form = h('form', { class: 'row card' },
-    h('input', { name: 'q', placeholder: 'Search: food, Lagos, racing…', style: 'flex:2;min-width:180px' }),
-    sel('kind', { '': 'Every kind', ...KIND }), h('input', { name: 'country', placeholder: 'Country (NG)', maxlength: 2, style: 'width:110px' }),
+    h('input', { name: 'q', placeholder: 'Search: food, Austin, racing…', style: 'flex:2;min-width:180px' }),
+    sel('kind', { '': 'Every kind', ...KIND }), h('input', { name: 'country', placeholder: 'Country (US)', maxlength: 2, style: 'width:110px' }),
     h('button', { type: 'submit' }, 'Search'));
   const list = h('div', { class: 'grid' });
   async function load() {
@@ -184,7 +184,7 @@ async function book(slotId) {
 function payButtons(b) {
   const wrap = h('div', { class: 'row' });
   for (const p of S.providers) {
-    const label = { manual: 'Bank transfer or mobile money', paystack: 'Pay with Paystack', stripe: 'Pay by card (Stripe)' }[p];
+    const label = { manual: 'Bank transfer', paystack: 'Paystack (Africa)', stripe: 'Pay by card' }[p];
     const btn = h('button', { type: 'button', class: p === 'manual' ? 'ghost' : '' }, label);
     btn.addEventListener('click', busy(btn, async () => { const r = await api(`/v1/bookings/${b.id}/pay`, { provider: p }); if (r.url.startsWith(location.origin)) go(new URL(r.url).pathname); else location.href = r.url; }));
     wrap.append(btn);
@@ -196,7 +196,7 @@ async function payPage(ref) {
   const { payment: p } = await api(`/v1/payments/${ref}`);
   show(h('div', { class: 'card', style: 'max-width:560px' }, h('h1', { style: 'font-size:1.8rem' }, p.status === 'paid' ? 'Paid. Thank you.' : 'Pay by transfer'),
     p.status === 'paid' ? h('p', {}, 'Your payment is confirmed.') : [
-      h('p', {}, `Send ${money(p.amount, p.currency)} by bank transfer or mobile money and put this reference in the description:`),
+      h('p', {}, `Send ${money(p.amount, p.currency)} by bank transfer (ACH or wire) and put this reference in the memo:`),
       h('pre', {}, p.ref),
       S.payInstructions ? h('pre', {}, S.payInstructions) : h('p', { class: 'note' }, 'Our team will send you the account to pay into.'),
       h('p', { class: 'muted small' }, 'Our team confirms it, usually the same day, and your booking or credit starts straight away.')],
@@ -235,12 +235,12 @@ async function dashboard(tab) {
 async function places(body) {
   const { properties } = await api('/v1/properties');
   const add = h('form', { class: 'card' }, h('h2', {}, 'Add a place'),
-    h('div', { class: 'two' }, field('Kind', sel('kind', KIND)), field('Name', h('input', { name: 'name', required: true, placeholder: 'Lagos Food Blog' }))),
+    h('div', { class: 'two' }, field('Kind', sel('kind', KIND)), field('Name', h('input', { name: 'name', required: true, placeholder: 'Austin Eats' }))),
     field('Address', h('input', { name: 'url', placeholder: 'https://…' }), '(optional)'),
-    field('What it is about', h('textarea', { name: 'about', placeholder: 'Recipes and restaurant reviews from Lagos' })),
-    field('Topics', h('input', { name: 'keywords', placeholder: 'food, lagos, recipes' }), '(helps pick fitting ads)'),
+    field('What it is about', h('textarea', { name: 'about', placeholder: 'Recipes and restaurant reviews from Austin' })),
+    field('Topics', h('input', { name: 'keywords', placeholder: 'food, austin, bbq' }), '(helps pick fitting ads)'),
     h('div', { class: 'two' }, field('Audience', h('input', { name: 'audience', type: 'number', min: 0, placeholder: 'Monthly readers, subscribers or players' })),
-      field('Country', h('input', { name: 'country', maxlength: 2, placeholder: 'NG' }))),
+      field('Country', h('input', { name: 'country', maxlength: 2, placeholder: 'US' }))),
     field('Currency you charge in', curSel()), err(), h('button', { type: 'submit' }, 'Add place'));
   add.addEventListener('submit', (e) => busy(add.querySelector('button'), async () => { await api('/v1/properties', { ...formData(add), audience: Number(formData(add).audience) || 0 }); places(body); })(e));
   rc(body, 
@@ -312,7 +312,7 @@ function adForm(campaigns, after, slot) {
   form.addEventListener('submit', (e) => busy(form.querySelector('button[type=submit]'), async () => {
     const f = formData(form), file = form.querySelector('input[type=file]').files[0];
     let cid = f.campaign_id;
-    if (!cid) cid = (await api('/v1/campaigns', { name: `${f.sponsor} ads`, currency: slot?.currency ?? 'NGN' })).campaign.id;
+    if (!cid) cid = (await api('/v1/campaigns', { name: `${f.sponsor} ads`, currency: slot?.currency ?? 'USD' })).campaign.id;
     await api('/v1/ads', { campaign_id: cid, kind: f.kind, sponsor: f.sponsor, title: f.title ?? '', body: f.body ?? '', cta: f.cta ?? '', url: f.url, image: file ? await fileToB64(file) : undefined });
     after();
   })(e));
@@ -327,7 +327,7 @@ async function adsTab(body) {
     h('div', { class: 'two' }, field('Currency', curSel()), field('Budget', h('input', { name: 'budget', inputmode: 'decimal' }))),
     h('div', { class: 'two' }, field('Price per 1,000 views', h('input', { name: 'cpm', inputmode: 'decimal' })), field('Most views a day', h('input', { name: 'daily_views', type: 'number', min: 0 }), '(0 = no limit)')),
     field('Topics', h('input', { name: 'keywords', placeholder: 'food, football' }), '(empty = any)'),
-    field('Countries', h('input', { name: 'countries', placeholder: 'NG, GH, KE' }), '(empty = any)'),
+    field('Countries', h('input', { name: 'countries', placeholder: 'US, CA, GB' }), '(empty = any)'),
     err(), h('button', { type: 'submit' }, 'Save as draft'));
   camp.addEventListener('submit', (e) => busy(camp.querySelector('button'), async () => {
     const f = formData(camp);
@@ -392,7 +392,7 @@ async function moneyTab(body) {
   const m = await api('/v1/money');
   const top = h('form', { class: 'card' }, h('h2', {}, 'Add credit'), h('p', { class: 'small muted' }, 'For pay-per-view campaigns. Bookings are paid one by one.'),
     h('div', { class: 'two' }, field('Amount', h('input', { name: 'amount', inputmode: 'decimal', required: true })), field('Currency', curSel())),
-    field('Pay with', sel('provider', Object.fromEntries(S.providers.map((p) => [p, { manual: 'Bank transfer or mobile money', paystack: 'Paystack', stripe: 'Card (Stripe)' }[p]])))),
+    field('Pay with', sel('provider', Object.fromEntries(S.providers.map((p) => [p, { manual: 'Bank transfer', paystack: 'Paystack (Africa)', stripe: 'Card' }[p]])))),
     err(), h('button', { type: 'submit' }, 'Continue'));
   top.addEventListener('submit', (e) => busy(top.querySelector('button'), async () => {
     const f = formData(top);
@@ -401,13 +401,13 @@ async function moneyTab(body) {
   })(e));
   const out = h('form', { class: 'card' }, h('h2', {}, 'Get paid'),
     h('div', { class: 'two' }, field('Amount', h('input', { name: 'amount', inputmode: 'decimal', required: true })), field('Currency', curSel())),
-    field('How', sel('method', { bank: 'Bank account', mobile_money: 'Mobile money', paypal: 'PayPal', other: 'Other' })),
-    field('Account details', h('textarea', { name: 'details', required: true, placeholder: 'Bank, account number and name; or phone number and network' })),
+    field('How', sel('method', { bank: 'Bank account (ACH)', paypal: 'PayPal', mobile_money: 'Mobile money', other: 'Other' })),
+    field('Account details', h('textarea', { name: 'details', required: true, placeholder: 'Bank name, routing and account number, account holder; or PayPal email' })),
     err(), h('button', { type: 'submit' }, 'Ask for payout'));
   out.addEventListener('submit', (e) => busy(out.querySelector('button'), async () => { const f = formData(out); await api('/v1/payouts', { ...f, amount: toMinor(f.amount, f.currency) }); moneyTab(body); })(e));
   const KINDS = { earning: 'Earned', fee: 'Fee', topup: 'Credit added', hold: 'Held for a campaign', release: 'Returned', refund: 'Refund', payout: 'Payout', payout_returned: 'Payout returned', spend: 'Spent' };
   rc(body, 
-    h('div', { class: 'grid' }, (m.balances.length ? m.balances : [{ currency: 'NGN', amount: 0 }]).map((b) => h('div', { class: 'card' }, h('div', { class: 'muted small' }, `Balance in ${b.currency}`), h('div', { class: 'stat' }, money(b.amount, b.currency))))),
+    h('div', { class: 'grid' }, (m.balances.length ? m.balances : [{ currency: 'USD', amount: 0 }]).map((b) => h('div', { class: 'card' }, h('div', { class: 'muted small' }, `Balance in ${b.currency}`), h('div', { class: 'stat' }, money(b.amount, b.currency))))),
     h('div', { class: 'split' },
       h('div', { class: 'card' }, h('h2', {}, 'History'), m.ledger.length ? h('div', { class: 'scroll' }, h('table', {}, h('tbody', {}, m.ledger.map((l) => h('tr', {},
         h('td', { class: 'small' }, when(l.at)), h('td', {}, KINDS[l.kind] ?? l.kind, l.note ? h('div', { class: 'small muted' }, l.note) : null), h('td', { class: 'num' }, money(l.amount, l.currency))))))) : h('p', { class: 'muted' }, 'Nothing yet.'),
