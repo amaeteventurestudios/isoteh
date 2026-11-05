@@ -68,7 +68,7 @@ async function copy(text, btn) { try { await navigator.clipboard.writeText(text)
 function go(path) { history.pushState({}, '', path); route(); }
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="/"]');
-  if (!a || a.target || e.metaKey || e.ctrlKey || a.hasAttribute('download') || /^\/(s|a|cr|e|go|c|wordpress|demo)\//.test(a.getAttribute('href'))) return;
+  if (!a || a.target || e.metaKey || e.ctrlKey || a.hasAttribute('download') || a.getAttribute('href') === '/' || /^\/(s|a|cr|e|go|c|wordpress|demo)\//.test(a.getAttribute('href'))) return;
   e.preventDefault(); go(a.getAttribute('href'));
 });
 addEventListener('popstate', route);
@@ -471,7 +471,7 @@ async function settings(body) {
   const shown = h('div');
   f.addEventListener('submit', (e) => busy(f.querySelector('button'), async () => { const r = await api('/v1/keys', formData(f)); rc(shown, h('p', { class: 'note' }, 'Copy it now; it won\'t be shown again.'), h('pre', {}, r.key)); })(e));
   const out = h('button', { type: 'button', class: 'ghost' }, 'Sign out');
-  out.addEventListener('click', busy(out, async () => { await api('/v1/auth/logout', {}); S.me = null; go('/'); }));
+  out.addEventListener('click', busy(out, async () => { await api('/v1/auth/logout', {}); S.me = null; location.href = '/'; }));
   rc(body, 
     h('div', { class: 'card' }, h('h2', {}, S.me.name), h('p', { class: 'muted' }, S.me.email, ` · ${S.me.role}`), out),
     h('div', { class: 'card' }, h('h2', {}, 'API keys'), h('p', { class: 'small muted' }, 'For your own servers: a chat app adding its channels as places, a studio adding slots from its build tools. Send it as "Authorization: Bearer <key>".'),
