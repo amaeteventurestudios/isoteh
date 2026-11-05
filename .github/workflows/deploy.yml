@@ -1,7 +1,7 @@
 # Tests every push; on main, sends the ad server to the shared server and installs it (deploy/install.sh).
 # Needs the repository secrets SERVER_HOST, SERVER_USER and SERVER_SSH_KEY (the same ones the games use).
 # Optional secrets: ISOTEH_ADMIN_EMAIL, ISOTEH_PAY_INSTRUCTIONS, PAYSTACK_SECRET_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET.
-# Optional variables: ADS_DOMAIN (e.g. ads.noveniqe.com, once its DNS points at the server), ISOTEH_BRAND.
+# Optional variables: ADS_DOMAIN (e.g. isoteh.noveniqe.com, once its DNS points at the server), ISOTEH_BRAND.
 name: test and deploy
 on:
   push:
