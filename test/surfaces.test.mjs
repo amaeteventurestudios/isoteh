@@ -28,7 +28,7 @@ test('newsletters: one ad per issue, image and link agree, Substack kit', async 
     assert.equal(img.headers.get('content-type'), 'image/png');
     const click = await buyer.get(`/e/${slot.id}/c?i=2026-10-29`);
     assert.equal(click.status, 302);
-    assert.match(click.location, /^https:\/\/kente\.test\/\?utm_source=isoteh&utm_medium=email$/);
+    assert.match(click.location, /^https:\/\/kente\.test\/\?utm_source=isoteh&utm_medium=email&isoteh_ref=[\w.-]+$/);
     const kit = (await buyer.get(`/e/${slot.id}/kit?i=2026-10-29`)).json;
     assert.equal(kit.sponsor, 'Kente Co');
     assert.equal(kit.label, 'Sponsored');

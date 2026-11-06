@@ -62,7 +62,7 @@ test('direct booking: list, book, accept, pay, run, count, settle', async () => 
     // a click goes to the advertiser with campaign tags, and counts once
     const c = await buyer.get(ad.click.replace(s.base, ''));
     assert.equal(c.status, 302);
-    assert.match(c.location, /^https:\/\/suya\.test\/menu\?utm_source=isoteh&utm_medium=banner$/);
+    assert.match(c.location, /^https:\/\/suya\.test\/menu\?utm_source=isoteh&utm_medium=banner&isoteh_ref=[\w.-]+$/);
     await buyer.get(ad.click.replace(s.base, ''));
     const mine = (await buyer.get('/v1/bookings')).json.bookings[0];
     assert.equal(mine.views, 1);
