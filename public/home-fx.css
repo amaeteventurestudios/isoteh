@@ -293,3 +293,26 @@ details[open] summary { color: var(--terra); }
   .js .tbl .tr { opacity: 1; transform: none; }
   .ef, .coin { display: none; }
 }
+
+/* calmer pass: fewer, quieter extras; motion stays where it explains something */
+.f3, .f6, .f7 { display: none; }
+.f1 { left: 4%; top: 190px; } .f5 { left: 6%; top: 520px; }
+.f2 { right: 4%; top: 180px; } .f4 { right: 6%; top: 500px; }
+.fl > .mini { animation-duration: 1s, 10s; }
+@keyframes bob { from { translate: 0 -4px; } to { translate: 0 4px; } }
+.mm-ad::after { animation-duration: 9s; }
+.toast .t-ic { animation: none; }
+.bg-fx .blob { opacity: .32; }
+.bg-fx .dots { opacity: .6; }
+.coin { display: none !important; }
+.flow path { opacity: .18; animation-duration: 5s; }
+.flow path:nth-child(2) { opacity: .14; animation-duration: 6s; }
+.flow path:nth-child(3) { opacity: .22; animation-duration: 7s; }
+.end-fx { display: none; }
+.end::before { animation: none; }
+.games-glow { animation: none; opacity: .7; }
+.calc::before { animation: none; opacity: .6; }
+.stage::before { animation-duration: 30s; opacity: .7; }
+.tile:hover::before, .tile.on::before { animation: none; opacity: 0; }
+.strip .marq { animation-duration: 48s; }
+.fl-track { animation-duration: 60s; }
