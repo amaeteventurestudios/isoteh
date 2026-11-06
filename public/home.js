@@ -34,6 +34,7 @@
   // ---- reveal on scroll ----
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -12% 0px' });
   $$('.rv').forEach((el) => io.observe(el));
+  const fb = $('.foot-big'); if (fb) new IntersectionObserver(([e]) => { if (e.isIntersecting) fb.classList.add('in'); }, { threshold: 0.1 }).observe(fb);
 
   // ---- the ad ----
   const DEFAULT = { name: 'Juniper Coffee', line: 'Small-batch beans roasted in Austin, at your door by Friday.', image: '', color: '#2f5d50', host: '', go: 'Shop the beans' };
@@ -173,7 +174,7 @@
 
   // ---- chat ----
   const msgs = $('#msgs'), aiA = $('#ai-a');
-  const PEOPLE = [['Maya', '#7c3aed', 'Anyone doing anything Saturday morning?'], ['Theo', '#0e7490', 'Farmers market on Republic Square, then a long walk.'], ['Priya', '#be123c', 'Looking for something new to try this weekend.']];
+  const PEOPLE = [['Maya', '#2a2f3a', 'Anyone doing anything Saturday morning?'], ['Theo', '#5b6170', 'Farmers market on Republic Square, then a long walk.'], ['Priya', '#8a909c', 'Looking for something new to try this weekend.']];
   let chatShown = false, chatTimer = [];
   const msgEl = ([n, c, t]) => { const m = el('div', 'msg'), av = el('span', 'av', n[0]); av.style.background = c; const b = el('div'); const h = el('div'); h.append(el('b', '', n), el('small', '', 'now')); b.append(h, el('p', '', t)); m.append(av, b); return m; };
   function chatSpon() {
