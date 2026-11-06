@@ -316,3 +316,68 @@ details[open] summary { color: var(--terra); }
 .tile:hover::before, .tile.on::before { animation: none; opacity: 0; }
 .strip .marq { animation-duration: 48s; }
 .fl-track { animation-duration: 60s; }
+
+/* black and white: a serious company. The only colour left is the brand's own ad. */
+:root {
+  --terra: #0b0d12; --terra-2: #000; --terra-soft: #0b0d120f; --terra-glow: #0b0d1226; --gold: #ffffff; --money: #0b0d12;
+  --sig: #0b0d12; --sig-soft: #0b0d120d;
+}
+.btn { --b: var(--ink); --t: var(--bg); }
+.btn:hover { box-shadow: 0 10px 24px -12px #0b0d1266; }
+.btn.inv { --b: var(--dark-ink); --t: var(--dark); }
+.mark, .foot .mark { background: var(--ink); color: var(--bg); }
+.foot .mark { background: var(--dark-ink); color: var(--dark); }
+.dot-live { background: var(--ink); animation-name: ping; }
+.bg-fx .b1 { background: #e3e5ea; } .bg-fx .b2 { background: #eceef2; } .bg-fx .b3 { background: #e7e8ec; }
+.bg-fx .blob { opacity: .55; }
+.stage::before { background: radial-gradient(28% 32% at 22% 30%, #ffffffcc, transparent 70%), radial-gradient(30% 34% at 80% 72%, #d9dce3aa, transparent 70%), radial-gradient(22% 26% at 62% 18%, #ffffff99, transparent 70%); }
+.calc::before { background: radial-gradient(50% 50% at 60% 50%, #e3e5ea, transparent 70%); }
+.games-glow { background: radial-gradient(40% 50% at 75% 40%, #ffffff14, transparent 70%), radial-gradient(30% 40% at 15% 80%, #ffffff0a, transparent 70%); }
+.end::before { background: radial-gradient(50% 50% at 50% 50%, #ffffff1a, transparent 70%); }
+.tr > :nth-child(2) { background: #f3f4f7; }
+.tr:not(.th):hover { background: #f8f9fb; }
+.y::before { background-color: var(--ink); }
+.toast.money .t-ic { background: var(--bg-2); color: var(--ink); } .toast.money b { color: var(--ink); }
+.toast.seen .t-ic { background: var(--bg-2); color: var(--ink); }
+.cfx.green .ci, .cfx .ci { background: var(--bg-2); color: var(--ink); }
+.mm-av, .av-nl { background: var(--ink); }
+.mc-av.a1 { background: #2a2f3a; } .mc-av.a2 { background: #5b6170; }
+.b-cat { color: var(--ink-2); }
+.b-hero { background: linear-gradient(135deg, #1d222d, #4b515e 55%, #9aa1b0); }
+.mb-car::after { background: var(--ink); box-shadow: 60px 0 0 #8a909c; }
+.vs-people i, .vs-people i:nth-child(3n+2), .vs-people i:nth-child(3n) { background: var(--ink); }
+.vs-people i:nth-child(2n) { background: #8a909c; }
+.vh-coin { color: var(--bg); background: var(--ink); box-shadow: 0 4px 10px -4px #0b0d1288; }
+.vh-amt .a2 { color: var(--ink); }
+.vt-row.zero em { color: var(--ink); }
+.va-stamp { border-color: var(--ink); color: var(--ink); }
+@keyframes va-yes { 0%, 44% { transform: none; } 48% { transform: scale(.9); } 54%, 100% { transform: none; } }
+.vai-card small { color: var(--mute); }
+.l-pay { background: var(--bg-2); border-color: var(--line-2); } .l-pay .big { color: var(--ink); }
+@keyframes pay-pop { 40% { transform: scale(1.06); } }
+.layer .hole, .l-page .hole { color: var(--ink); border-color: var(--ink); background: var(--sig-soft); }
+.l-count .frame { border-color: var(--ink); }
+.steps::after { background: var(--ink); }
+.strip .marq li svg { background: var(--bg-2); color: var(--ink); }
+.strip .marq li:hover { border-color: var(--ink); color: var(--ink); }
+.flow path, .flow path:nth-child(2), .flow path:nth-child(3) { stroke: #0b0d12; opacity: .14; }
+.sp-keep { background: var(--ink); } .sp-fee { background: #8a909c; }
+.calc .keep dd { color: var(--ink); }
+.g-points li::before { background: var(--dark-ink); }
+.tv-tag b { color: #fff; }
+.tv-count { background: var(--dark-ink); color: var(--dark); }
+.meter.count .m-bar i { background: #fff; }
+summary:hover, details[open] summary { color: var(--ink); }
+summary::after { background: linear-gradient(var(--ink), var(--ink)) center / 12px 1.5px no-repeat, linear-gradient(var(--ink), var(--ink)) center / 1.5px 12px no-repeat; }
+.seg button .tp { background: var(--ink); }
+.cursor::after { border-color: var(--ink); }
+.ad.press { animation-name: press-ad-bw; }
+@keyframes press-ad-bw { 40% { transform: scale(.97); box-shadow: 0 0 0 4px #0b0d1226; } }
+.tile::before { display: none; }
+
+/* the name, very big, at the foot of the page */
+.foot { padding-bottom: 0; overflow: hidden; }
+.foot-big { max-width: var(--wrap); margin: 40px auto 0; padding: 0 var(--gut); line-height: .76; user-select: none; }
+.foot-big span { display: block; font-weight: 600; font-size: clamp(90px, 30vw, 360px); letter-spacing: -.065em; text-align: center; color: transparent; background: linear-gradient(180deg, #eef0f4 0%, #eef0f4 35%, #eef0f400 100%); -webkit-background-clip: text; background-clip: text; transform: translateY(14%); }
+.js .foot-big span { opacity: 0; transform: translateY(40%); transition: opacity 1.2s var(--ease), transform 1.4s var(--ease); }
+.js .foot-big.in span { opacity: 1; transform: translateY(14%); }
