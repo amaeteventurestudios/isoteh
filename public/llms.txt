@@ -1,0 +1,67 @@
+# Isoteh
+
+> One ad network for blogs, newsletters, apps, chat and games. Owners set the price and approve every ad; readers are never tracked; every ad is labelled Sponsored.
+
+## Get started
+
+- [Introduction](https://isoteh.amaete.com/docs): Isoteh is one ad network for blogs, newsletters, apps, chat and games. Owners sell the space they already have, brands book it directly, and nobody reading is tracked.
+- [How it works](https://isoteh.amaete.com/docs/how-it-works): A brand pays first, the owner approves, the ad runs where it fits, and the owner is paid once it has run.
+- [Core concepts](https://isoteh.amaete.com/docs/core-concepts): The handful of words used across Isoteh, in the order you meet them.
+- [Owner quickstart](https://isoteh.amaete.com/docs/quickstart-owners): List a space, paste two lines, and your first booking can arrive the same day.
+- [Brand quickstart](https://isoteh.amaete.com/docs/quickstart-brands): Find a space that fits, book it, upload your ad and pay. It goes live when the owner approves it.
+
+## Owners
+
+- [Integration guide](https://isoteh.amaete.com/docs/integration-guide): The full process to add Isoteh ads to a site, a newsletter, an app or a game, from picking the spot to getting paid. For the short version, see the owner quickstart.
+- [Websites and blogs](https://isoteh.amaete.com/docs/websites): One div and one script line. The space is kept free while the ad loads, so the page never jumps, and nothing about your readers is sent anywhere.
+- [Newsletters](https://isoteh.amaete.com/docs/newsletters): An HTML block for every tool that allows one, and a ready-made block for Substack. Every reader of one issue sees the same ad.
+- [Apps and chat](https://isoteh.amaete.com/docs/apps): Ask for a card and draw it in your own style. Cards come back for public channels, feeds and AI answers, never for private chats.
+- [Games](https://isoteh.amaete.com/docs/games): Turn any surface in your world into a billboard. A view counts only when the player can really read it.
+- [Creators](https://isoteh.amaete.com/docs/creators): Sell sponsored posts on your own channel. Brands book and pay first, you post with a tracked link, and you are paid three days later.
+- [Approving ads](https://isoteh.amaete.com/docs/approving-ads): Every ad waits for you. You see exactly what will run, on which dates, and you can say no to anyone.
+- [Getting paid](https://isoteh.amaete.com/docs/getting-paid): The brand pays when they book. We hold the money while the ad runs, then 85% moves to your balance, ready to withdraw.
+
+## Brands
+
+- [Campaigns](https://isoteh.amaete.com/docs/campaigns): Set a budget and a price per 1,000 views, and your ad runs on every space whose owner opted in, matched by topic and country.
+- [Ad rules and sizes](https://isoteh.amaete.com/docs/ad-rules): An ad is an image or plain text. No scripts, no HTML, nothing that moves on its own with sound.
+- [Pixel and Conversions API](https://isoteh.amaete.com/docs/pixel): Count sign-ups and sales that came from your ads, from the browser or from your server, without cookies and without knowing who anyone is.
+- [Reports](https://isoteh.amaete.com/docs/reports): Views, clicks, spend and events by ad, ad group, campaign and day.
+
+## SDKs
+
+- [SDKs](https://isoteh.amaete.com/docs/sdks): Small files, no dependencies, served from Isoteh itself. Each one counts views by the same rule and sends nothing about the person.
+- [Website script](https://isoteh.amaete.com/docs/sdk-web): Reference for isoteh.js: attributes, behaviour and what it sends.
+- [Native SDK](https://isoteh.amaete.com/docs/sdk-native): Reference for getNativeAd: options and the card it returns.
+- [Three.js board](https://isoteh.amaete.com/docs/sdk-three): Reference for AdBoard: a billboard mesh that loads, draws and counts its own ad.
+- [Game SDK](https://isoteh.amaete.com/docs/sdk-game): Reference for GameAd: the view rules for any engine, without Three.js.
+
+## API reference
+
+- [API overview](https://isoteh.amaete.com/docs/api): A small JSON API. Ads, views and clicks are public; everything about your account needs a key.
+- [Get an ad](https://isoteh.amaete.com/docs/api-ad): GET /v1/ad returns the ad for a space right now, an Advertise here offer, or nothing.
+- [Views and clicks](https://isoteh.amaete.com/docs/api-views): Each ad carries two links. Call the view link once it was seen, and send taps through the click link.
+- [Errors and limits](https://isoteh.amaete.com/docs/api-errors): Errors are JSON with one plain sentence. Limits keep one page or one script from flooding a space.
+
+## Resources
+
+- [How views count](https://isoteh.amaete.com/docs/counting): One rule for every kind of place, so a view means the same thing on a blog, in an app and in a game.
+- [Changelog](https://isoteh.amaete.com/docs/changelog): What changed, newest first.
+- [Docs for AI tools](https://isoteh.amaete.com/docs/ai-tools): Give your coding assistant the whole of these docs in one file.
+
+## Company and legal
+
+- [For brands](https://isoteh.amaete.com/brands): Put your ad inside the newsletters, articles, apps and games your customers already read, matched to the topic and never to the person.
+- [For owners](https://isoteh.amaete.com/owners): Earn from the space you already have. Set your price, approve every ad, and get paid after it runs.
+- [About Isoteh](https://isoteh.amaete.com/about): Advertising on your terms. We are building the ad network for the people who own the page.
+- [Brand assets](https://isoteh.amaete.com/brand): The Isoteh mark, wordmark, colours and type, for press, partners and anyone writing about us.
+- [How can we help?](https://isoteh.amaete.com/help): Guides for owners and brands, answers to common questions, and a way to reach us.
+- [Questions](https://isoteh.amaete.com/faq): Short answers to what owners and brands ask us most.
+- [Get in touch](https://isoteh.amaete.com/contact): We are a small team and read every message.
+- [Terms of service](https://isoteh.amaete.com/terms): The agreement between you and Amaete Venture Studios for using Isoteh, as an owner, a brand or a visitor.
+- [Privacy policy](https://isoteh.amaete.com/privacy): What we collect, why, and the choices you have. The short version: we do not track the people who see ads.
+- [Brand safety](https://isoteh.amaete.com/brand-safety): The rules every ad, every place and every view on Isoteh must follow, so owners, brands and readers can trust each other.
+- [Data processing terms](https://isoteh.amaete.com/dpa): How personal data is handled between Isoteh and the owners and brands who use it. These terms form part of our terms of service; no signature is needed.
+- [Sub-processors](https://isoteh.amaete.com/subprocessors): The companies we use to run Isoteh that may handle personal data, what each one does, and where.
+- [Security](https://isoteh.amaete.com/security): How we protect Isoteh, the people who use it and the money that moves through it.
+- [Your privacy choices](https://isoteh.amaete.com/privacy-choices): What you can do about your data on Isoteh, whether you see ads, click them or have an account.

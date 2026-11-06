@@ -559,3 +559,16 @@ summary::after { background: linear-gradient(var(--ink), var(--ink)) center / 12
   .l-held .lh-bar, .l-pay .lp-split { height: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .l-held.on .lh-bar i, .l-pay.on .lp-split .you { animation: none; } }
+
+/* the footer: five columns of links, like a proper company, with the big name underneath */
+.foot { padding-top: 64px; }
+.foot-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(5, minmax(0, 1fr)); gap: 32px 24px; }
+.foot-brand p { margin-top: 14px; max-width: 30ch; font-size: 14px; line-height: 1.6; color: var(--dark-mute); }
+.foot-col { display: flex !important; flex-direction: column; gap: 10px !important; }
+.foot-col h2 { font-size: 14px; font-weight: 500; color: var(--dark-ink); margin: 4px 0 6px; letter-spacing: 0; }
+.foot-col a { color: var(--dark-mute); text-decoration: none; font-size: 14px; line-height: 1.4; transition: color .2s; }
+.foot-col a:hover { color: var(--dark-ink); }
+.foot-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--dark-line); font-size: 13.5px; color: var(--dark-mute); }
+.foot-base a { color: var(--dark-mute); text-decoration: none; } .foot-base a:hover { color: var(--dark-ink); }
+@media (max-width: 64rem) { .foot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .foot-brand { grid-column: 1 / -1; } }
+@media (max-width: 40rem) { .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; } }
