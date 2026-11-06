@@ -144,7 +144,7 @@
 @keyframes rise-coin { 0% { opacity: 0; transform: translateY(0) rotateY(0); } 10% { opacity: .9; } 80% { opacity: .7; } 100% { opacity: 0; transform: translateY(-92svh) rotate(40deg); } }
 .steps { position: relative; }
 @media (min-width: 64.01rem) {
-  .steps::before, .steps::after { content: ""; position: absolute; left: -28px; top: 39svh; bottom: 39svh; width: 2px; border-radius: 1px; background: var(--line); }
+  .steps::before, .steps::after { content: ""; position: absolute; left: -28px; top: 22svh; bottom: 22svh; width: 2px; border-radius: 1px; background: var(--line); }
   .steps::after { background: linear-gradient(var(--terra), var(--money)); transform-origin: top; transform: scaleY(var(--p, 0)); }
   .steps li.on::before { color: var(--terra); }
 }
