@@ -58,7 +58,7 @@ h1, h2, h3, p { margin: 0; }
 
 /* reveal */
 .js .rise { opacity: 0; transform: translateY(18px); animation: rise .9s var(--ease) forwards; }
-.js .rise:nth-child(2) { animation-delay: .08s; } .js .rise:nth-child(3) { animation-delay: .16s; } .js .rise:nth-child(4) { animation-delay: .24s; }
+.js .rise:nth-child(2) { animation-delay: .08s; } .js .rise:nth-child(3) { animation-delay: .16s; } .js .rise:nth-child(4) { animation-delay: .24s; } .js .rise:nth-child(5) { animation-delay: .32s; } .js .rise:nth-child(6) { animation-delay: .38s; }
 .js .demo .rise { animation-delay: .32s; } .js .demo .stage-wrap.rise { animation-delay: .42s; }
 @keyframes rise { to { opacity: 1; transform: none; } }
 .js .rv { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
@@ -77,6 +77,15 @@ h1, h2, h3, p { margin: 0; }
 .display.sm { font-size: clamp(40px, 6.4vw, 88px); max-width: 14ch; }
 .lede { font-size: clamp(17px, 1.7vw, 21px); color: var(--ink-2); max-width: 34ch; margin: 22px auto 0; text-wrap: balance; }
 .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+
+/* hero numbers */
+.stats { display: flex; justify-content: center; gap: clamp(28px, 6vw, 72px); margin: 48px auto 0; }
+.stats div { display: flex; flex-direction: column-reverse; align-items: center; gap: 4px; }
+.stats dd { margin: 0; font-weight: 600; font-size: clamp(34px, 4.6vw, 56px); letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.stats dt { color: var(--ink-2); font-size: 14.5px; max-width: 16ch; text-align: center; line-height: 1.35; }
+.src { margin-top: 18px; font-size: 13px; color: var(--mute); }
+.src a { color: var(--mute); text-underline-offset: 2px; }
+.src a:hover { color: var(--ink); }
 
 /* demo */
 .demo { padding: 8px 0 clamp(64px, 10vh, 120px); }
@@ -401,6 +410,9 @@ details p { color: var(--ink-2); padding: 0 40px 22px 0; max-width: 60ch; animat
   .nav-act .btn.sm { padding: 0 14px; }
   .hero { padding-top: calc(var(--nav) + 40px); }
   .kicker { font-size: 13px; }
+  .stats { gap: 18px; margin-top: 36px; }
+  .stats dd { font-size: 30px; }
+  .stats dt { font-size: 12.5px; }
   .display { font-size: clamp(42px, 12.4vw, 60px); }
   .seg button { padding: 8px 12px; font-size: 13.5px; }
   .stage { height: 500px; border-radius: 22px; }

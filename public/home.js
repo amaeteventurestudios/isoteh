@@ -24,6 +24,13 @@
     }));
   });
 
+  // ---- hero numbers count up ----
+  if (!reduce) $$('[data-count]').forEach((d) => {
+    const end = +d.dataset.count, unit = d.dataset.unit ?? 'M+', t0 = performance.now() + 500;
+    const step = (t) => { const k = Math.min(1, Math.max(0, (t - t0) / 1400)), e = 1 - (1 - k) ** 3; d.textContent = `${Math.round(end * e)}${unit}`; if (k < 1) requestAnimationFrame(step); };
+    d.textContent = `0${unit}`; requestAnimationFrame(step);
+  });
+
   // ---- reveal on scroll ----
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -12% 0px' });
   $$('.rv, .games-art').forEach((el) => io.observe(el));
