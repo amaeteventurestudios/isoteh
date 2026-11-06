@@ -313,6 +313,54 @@
     });
   });
 
+  // ---- side menu: shows where you are on the page ----
+  const side = $('#side');
+  if (side) {
+    const links = $$('a', side), secs = links.map((a) => $(a.getAttribute('href'))).filter(Boolean);
+    const mark = () => {
+      side.classList.toggle('show', scrollY > innerHeight * 0.6);
+      let cur = secs[0];
+      for (const sec of secs) if (sec.getBoundingClientRect().top < innerHeight * 0.4) cur = sec;
+      links.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === `#${cur.id}`));
+    };
+    let mt = false;
+    addEventListener('scroll', () => { if (!mt) { mt = true; requestAnimationFrame(() => { mt = false; mark(); }); } }, { passive: true }); mark();
+  }
+
+  // ---- owners rail: a progress line, and it slides on its own until touched ----
+  const rbar = $('#rail-bar');
+  const rprog = () => { const max = rail.scrollWidth - rail.clientWidth; const w = Math.max(0.12, rail.clientWidth / rail.scrollWidth); rbar.style.width = `${w * 100}%`; rbar.style.transform = `translateX(${max > 0 ? (rail.scrollLeft / max) * ((1 - w) / w) * 100 : 0}%)`; };
+  rail.addEventListener('scroll', rprog, { passive: true }); addEventListener('resize', rprog); rprog();
+  let railTouched = false, railHover = false;
+  ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach((ev) => rail.addEventListener(ev, () => { railTouched = true; }, { passive: true }));
+  [prev, next].forEach((b) => b.addEventListener('click', () => { railTouched = true; }));
+  rail.addEventListener('mouseenter', () => { railHover = true; }); rail.addEventListener('mouseleave', () => { railHover = false; });
+  if (!reduce) setInterval(() => {
+    if (railTouched || railHover || !rail.classList.contains('play')) return;
+    const max = rail.scrollWidth - rail.clientWidth;
+    rail.scrollTo({ left: rail.scrollLeft >= max - 8 ? 0 : rail.scrollLeft + stepW(), behavior: 'smooth' });
+  }, 3800);
+
+  // ---- the right moment: brands and owners, each with its own window ----
+  const moTabs = $$('.mo-seg [role=tab]'), moInd = $('.mo-ind');
+  if (moTabs.length) {
+    const moPlace = () => { const t = moTabs.find((x) => x.getAttribute('aria-selected') === 'true'); moInd.style.width = `${t.offsetWidth}px`; moInd.style.transform = `translateX(${t.offsetLeft - 5}px)`; };
+    let moCur = 'brand', moTouched = false, moVisible = false;
+    const bal = $('[data-bal]');
+    const moShow = (m) => {
+      moCur = m;
+      moTabs.forEach((t) => { const on = t.dataset.m === m; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
+      $$('.mo-text, .mo-win').forEach((x) => { x.hidden = x.dataset.m !== m; });
+      const w = $(`.mo-win[data-m="${m}"]`); w.classList.remove('play'); void w.offsetWidth; if (moVisible && !reduce) w.classList.add('play');
+      if (m === 'owner' && bal && !reduce) { const t0 = performance.now() + 2000; const run = (t) => { const k = Math.min(1, Math.max(0, (t - t0) / 1200)); bal.textContent = '$' + (425 * (1 - (1 - k) ** 3)).toFixed(2); if (k < 1) requestAnimationFrame(run); }; requestAnimationFrame(run); }
+      moPlace();
+    };
+    moTabs.forEach((t) => t.addEventListener('click', () => { moTouched = true; moShow(t.dataset.m); }));
+    addEventListener('resize', moPlace); document.fonts?.ready.then(moPlace); moPlace();
+    new IntersectionObserver(([e]) => { const was = moVisible; moVisible = e.isIntersecting; if (moVisible && !was) moShow(moCur); }, { threshold: 0.35 }).observe($('#moment'));
+    if (!reduce) setInterval(() => { if (!moTouched && moVisible) moShow(moCur === 'brand' ? 'owner' : 'brand'); }, 9000);
+  }
+
   // ---- calculator ----
   const pin2 = $('#price-in');
   const usd = (c) => '$' + (c / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Isoteh docs: put ads on your site, newsletter, app or game</title>
+<meta name="description" content="How to put Isoteh ad spaces on a website, WordPress, Ghost, a newsletter, an app or chat, and a Three.js game, and how to count sales without tracking people.">
+<meta name="theme-color" content="#fbfbfc">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%230b0d12'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.6' fill='none' stroke='white' stroke-width='1.4'/%3E%3Crect x='6.3' y='6.3' width='3.4' height='3.4' rx='.6' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/a/home.css">
+<link rel="stylesheet" href="/a/home-fx.css">
+<link rel="stylesheet" href="/a/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the page</a>
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="wordmark" href="/" aria-label="Isoteh home"><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><rect x="5.5" y="5.5" width="5" height="5" rx="1" fill="currentColor"/></svg></span>Isoteh</a>
+    <nav class="links" aria-label="Main">
+      <a href="/#demo">See your ad</a>
+      <a href="/#how">How it works</a>
+      <a href="/#games">Games</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#questions">Questions</a>
+      <a href="/docs">Docs</a>
+    </nav>
+    <div class="nav-act">
+      <a class="btn ghost sm" href="/app">Sign in</a>
+      <a class="btn sm" href="/app#signup">Start selling</a>
+      <button class="burger" id="burger" type="button" aria-label="Open the menu" aria-expanded="false" aria-controls="sheet"><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="sheet" id="sheet">
+    <a href="/#demo">See your ad</a><a href="/#how">How it works</a><a href="/#games">Games</a><a href="/#pricing">Pricing</a><a href="/#questions">Questions</a>
+    <a href="/docs">Docs</a><a href="/market">Find ad space</a><a href="/app#signup">Make an account</a><a href="/app">Sign in</a>
+  </div>
+</header>
+<main id="main" class="docs">
+  <div class="wrap d-head"><h1 class="h2">Docs</h1><p>Everything you need to put Isoteh ads on a website, a newsletter, an app or a game, and to count what they sell.</p></div>
+  <div class="wrap d-grid">
+    <nav class="d-toc" aria-label="On this page"><a href="#start">Start here</a><a href="#website">Any website</a><a href="#wordpress">WordPress</a><a href="#ghost">Ghost</a><a href="#newsletter">Newsletters</a><a href="#native">Apps and chat</a><a href="#games">Games</a><a href="#creators">Creators</a><a href="#sales">Counting sales</a><a href="#rules">Ad rules</a></nav>
+    <div class="d-body">
+<section class="dsec" id="start" aria-labelledby="start-h"><h2 id="start-h">Start here</h2><p>Isoteh sells the ad space you already have. You make an account, add a space (a spot on a page, a block in a newsletter, a board in a game), set its price, and paste one small piece of code where the ad should appear. Brands book it and pay up front. You approve each ad before it runs, and you are paid after it has run.</p>
+<ol class="dsteps"><li><a href="/app#signup">Make an account</a>. Listing is free.</li><li>In the dashboard, add a space and choose what it is: banner, native card, email, game board or creator post.</li><li>Copy the code the dashboard gives you. It carries the space's own id, which looks like <code>sl_</code> followed by letters.</li><li>Paste it where the ad should go, using the guide below for your kind of place.</li></ol>
+<p>Every example on this page uses <code>sl_your_slot</code>. Swap in your own space id.</p></section>
+<section class="dsec" id="website" aria-labelledby="website-h"><h2 id="website-h">Any website</h2><p>Paste this where the ad should appear. The space is kept free while the ad loads, so the page never jumps.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">&lt;div data-isoteh="sl_your_slot"&gt;&lt;/div&gt;
+&lt;script async src="https://isoteh.amaete.com/s/isoteh.js"&gt;&lt;/script&gt;</pre></div>
+<p>Tell the server what the page is about, so it can choose a fitting ad without knowing anything about the reader:</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">&lt;div data-isoteh="sl_your_slot" data-keywords="coffee, austin, recipes"&gt;&lt;/div&gt;</pre></div></section>
+<section class="dsec" id="wordpress" aria-labelledby="wordpress-h"><h2 id="wordpress-h">WordPress</h2><p>Install the small Isoteh plugin from <a href="/wordpress/isoteh.php">https://isoteh.amaete.com/wordpress/isoteh.php</a>, set the server address once under Settings, then put the shortcode in any post, page or widget. You can also paste the website code into a Custom HTML block.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">[isoteh slot="sl_your_slot"]</pre></div></section>
+<section class="dsec" id="ghost" aria-labelledby="ghost-h"><h2 id="ghost-h">Ghost</h2><p>Add an HTML card where the ad goes and paste the website code. To show it on every post, put the script line in Settings, Code injection, Site footer, and the box in your theme.</p></section>
+<section class="dsec" id="newsletter" aria-labelledby="newsletter-h"><h2 id="newsletter-h">Newsletters</h2><p>For Ghost, Beehiiv, Kit, Mailchimp and Brevo, paste this into an HTML block in the email. Replace ISSUE with a new name for every send; the date works well. Everyone who gets one issue sees the same ad.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">&lt;table role="presentation" width="100%" style="max-width:600px;margin:16px auto"&gt;
+  &lt;tr&gt;&lt;td style="font:12px sans-serif;color:#777;padding-bottom:4px"&gt;Sponsored&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;&lt;a href="https://isoteh.amaete.com/e/sl_your_slot/c?i=ISSUE"&gt;&lt;img src="https://isoteh.amaete.com/e/sl_your_slot.png?i=ISSUE" width="600" alt="Sponsored" style="display:block;width:100%;height:auto;border:0"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</pre></div>
+<p>Opens are counted, but mail apps load images ahead of time, so treat opens as an estimate. Clicks are exact.</p>
+<p>Substack does not run outside code, so open the ready-made block for your issue, add its image to the post, link the image to the link it gives you, and write Sponsored above it:</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">https://isoteh.amaete.com/e/sl_your_slot/kit?i=ISSUE</pre></div></section>
+<section class="dsec" id="native" aria-labelledby="native-h"><h2 id="native-h">Apps and chat</h2><p>Ask for a card and draw it in your own style, always with the word Sponsored. Cards only come back for public channels and feeds. Send <code>ctx=private</code> from a private chat and you get nothing.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">import { getNativeAd } from 'https://isoteh.amaete.com/s/isoteh-native.mjs';
+
+const card = await getNativeAd({ server: 'https://isoteh.amaete.com', slot: 'sl_your_slot', keywords: 'channel topic words' });
+if (card) {
+  show(card);
+  card.seen();   // once it has been on screen for a second
+}
+// on tap: card.open()</pre></div></section>
+<section class="dsec" id="games" aria-labelledby="games-h"><h2 id="games-h">Games</h2><p>Turn any surface in a Three.js game into a billboard. A view counts only when the board is on screen, big enough, facing the camera and not hidden, for a full second.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">import { AdBoard } from 'https://isoteh.amaete.com/s/isoteh-three.mjs';
+
+const board = new AdBoard(THREE, { server: 'https://isoteh.amaete.com', slot: 'sl_your_slot', width: 8, height: 4 });
+scene.add(board.mesh);
+
+// every frame:
+board.update(camera, renderer, dt, { occluders: [buildings] });
+
+// when the player taps the board:
+board.open();</pre></div>
+<p>Unity, Godot or your own engine: fetch the ad as JSON, draw its image on a surface, call its view link once the player has seen it for a second, and open its click link on tap.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">GET https://isoteh.amaete.com/v1/ad?slot=sl_your_slot&amp;kw=racing,cars
+
+{ "ad": { "image", "width", "height", "sponsor" }, "label": "Sponsored", "view", "click" }</pre></div></section>
+<section class="dsec" id="creators" aria-labelledby="creators-h"><h2 id="creators-h">Creators</h2><p>Share your booking page in your bio or media kit. Brands book and pay up front, you get a tracked link for each post, and you are paid once the post is up.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">https://isoteh.amaete.com/book/sl_your_slot</pre></div></section>
+<section class="dsec" id="sales" aria-labelledby="sales-h"><h2 id="sales-h">Counting sales</h2><p>For brands. Put the events tag on every page of your site, then call it where something happens. It sets no cookies, and it sends nothing at all for visitors who did not arrive from an Isoteh ad.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">&lt;script async src="https://isoteh.amaete.com/s/isoteh-events.js"&gt;&lt;/script&gt;
+
+isoteh('purchase', { value: 24.00, currency: 'USD' });
+isoteh('sign_up');</pre></div>
+<p>A click on an ad adds <code>?isoteh_ref=</code> to your link. The reference names the ad and the day, the same for everyone who clicked that ad that day, so it can never point to one person.</p>
+<p>From your server, send the same events with an API key from the dashboard. The value is in minor units, so 2400 is $24.00.</p>
+<div class="dc"><button class="cp" type="button">Copy</button><pre class="code">curl https://isoteh.amaete.com/v1/events \
+  -H 'Authorization: Bearer isk_your_key' \
+  -H 'Content-Type: application/json' \
+  -d '{"event":"purchase","ref":"REF_FROM_THE_LINK","value":2400,"currency":"USD"}'</pre></div></section>
+<section class="dsec" id="rules" aria-labelledby="rules-h"><h2 id="rules-h">Ad rules</h2><ul class="drules"><li>Ads are an image or plain text. No HTML and no scripts, ever.</li><li>Every ad carries the label Sponsored.</li><li>No ads in private chats.</li><li>Readers are never tracked: no cookies, no stored IP addresses, no ids. Ads are chosen by the page's topic and the reader's country only.</li><li>Owners approve every ad before it runs, and can say no.</li></ul>
+<p>Questions or a place we do not cover yet? <a href="/app#signup">Make an account</a> and write to us from the dashboard.</p></section>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="wordmark" href="/"><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><rect x="5.5" y="5.5" width="5" height="5" rx="1" fill="currentColor"/></svg></span>Isoteh</a>
+    <nav aria-label="Footer"><a href="/market">Find ad space</a><a href="/app#signup">Start selling</a><a href="/#games">Games</a><a href="/#pricing">Pricing</a><a href="/docs">Docs</a><a href="/demo/index.html">Developer demo</a></nav>
+    <p>Ads chosen by context, never by tracking people. Always labelled Sponsored.</p>
+  </div>
+  <div class="foot-big" aria-hidden="true"><span>Isoteh</span></div>
+</footer>
+<script src="/a/docs.js" defer></script>
+</body>
+</html>
