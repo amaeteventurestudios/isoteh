@@ -3,14 +3,12 @@
 const $main = document.getElementById('main');
 let S = { me: null, brand: 'Isoteh', providers: ['manual'], currencies: ['USD'], feeBps: 1500, releaseDays: 3, publicUrl: location.origin };
 
-// ---- theme ----
-const root = document.documentElement;
-try { const t = localStorage.getItem('is-theme'); if (t) root.dataset.theme = t; } catch { /* private mode */ }
-document.getElementById('theme').addEventListener('click', () => {
-  const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-  root.dataset.theme = dark ? 'light' : 'dark';
-  try { localStorage.setItem('is-theme', root.dataset.theme); } catch { /* ignore */ }
-});
+// ---- menu (the left panel; a drawer on phones) ----
+const panelMenu = document.getElementById('menu');
+const closeMenu = () => { document.body.classList.remove('menu-open'); panelMenu.setAttribute('aria-expanded', 'false'); };
+panelMenu.addEventListener('click', () => { const o = document.body.classList.toggle('menu-open'); panelMenu.setAttribute('aria-expanded', String(o)); });
+document.getElementById('scrim').addEventListener('click', closeMenu);
+addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 
 // ---- helpers ----
 const rc = (el, ...kids) => el.replaceChildren(...kids.flat(Infinity).filter((k) => k !== null && k !== undefined && k !== false));
@@ -78,7 +76,11 @@ function show(...nodes) { rc($main, ...nodes); $main.focus({ preventScroll: true
 // ---- pages ----
 async function route() {
   const p = location.pathname;
-  for (const a of document.querySelectorAll('nav a')) a.classList.toggle('on', p.startsWith(a.getAttribute('href')));
+  closeMenu();
+  const cur = p === '/app' ? '/app/places' : p;
+  for (const a of document.querySelectorAll('.side a')) { const on = cur.startsWith(a.getAttribute('href')); a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }
+  document.getElementById('nav-staff').hidden = !['staff', 'admin'].includes(S.me?.role);
+  document.getElementById('who').textContent = S.me ? `Signed in as ${S.me.email}` : '';
   try {
     if (p === '/') return landing();
     if (p === '/market') return market();
@@ -113,9 +115,9 @@ function landing() {
 }
 
 async function market() {
-  const form = h('form', { class: 'row card' },
-    h('input', { name: 'q', placeholder: 'Search: food, Austin, racing…', style: 'flex:2;min-width:180px' }),
-    sel('kind', { '': 'Every kind', ...KIND }), h('input', { name: 'country', placeholder: 'Country (US)', maxlength: 2, style: 'width:110px' }),
+  const form = h('form', { class: 'card search' },
+    h('input', { name: 'q', placeholder: 'Search: food, Austin, racing…', 'aria-label': 'Search' }),
+    sel('kind', { '': 'Every kind', ...KIND }), h('input', { name: 'country', placeholder: 'Country (US)', maxlength: 2, 'aria-label': 'Country' }),
     h('button', { type: 'submit' }, 'Search'));
   const list = h('div', { class: 'grid' });
   async function load() {
@@ -227,7 +229,7 @@ async function dashboard(tab) {
   const tabs = [['places', 'My places'], ['ads', 'My ads'], ['bookings', 'Bookings'], ['money', 'Money'], ['reports', 'Reports'],
     ...(['staff', 'admin'].includes(S.me.role) ? [['staff', 'Staff']] : []), ['settings', 'Settings']];
   const body = h('div');
-  show(h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('a', { href: `/app/${k}`, class: k === tab ? 'on' : '', role: 'tab' }, t))), body);
+  show(h('h1', { class: 'page-title' }, (tabs.find(([k]) => k === tab) ?? tabs[0])[1]), h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('a', { href: `/app/${k}`, class: k === tab ? 'on' : '', role: 'tab' }, t))), body);
   const pages = { places, ads: adsTab, bookings, money: moneyTab, reports, staff: staffTab, settings };
   await (pages[tab] ?? places)(body);
 }
