@@ -15,6 +15,8 @@ plug into it like any customer. Read `docs/HANDOFF.md` first.
   are invented.
 - The dashboard in `web/` is the one exception to "no dependencies": React, shadcn/ui, Tailwind and Tabler icons at
   build time only. Rebuild with `cd web && npx vite build` and commit `public/app/`.
+- Docs wiki (`/docs/*`), company, help and legal pages and the site footer are generated: edit `tools/site/*.mjs`, then
+  run `node tools/site.mjs` and commit `public/docs/`, `public/pages/`, `public/home.html` and `public/llms.txt`.
 - Phone-first: check the dashboard at 390×844 and 1280×800, light and dark.
 
 ## Testing
