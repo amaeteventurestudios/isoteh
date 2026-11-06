@@ -6,15 +6,17 @@
 <title>Isoteh: ads that fit where they run</title>
 <meta name="description" content="One ad network for blogs, newsletters, games and chat. Owners set the price and approve every ad. Readers are never tracked.">
 <meta name="theme-color" content="#fbfbfc">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%230b0d12'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.6' fill='none' stroke='white' stroke-width='1.4'/%3E%3Crect x='6.3' y='6.3' width='3.4' height='3.4' rx='.6' fill='white'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23c2502e'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.6' fill='none' stroke='white' stroke-width='1.4'/%3E%3Crect x='6.3' y='6.3' width='3.4' height='3.4' rx='.6' fill='white'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/a/home.css">
+<link rel="stylesheet" href="/a/home-fx.css">
 <script src="/a/home-head.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the page</a>
+<div class="bg-fx" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><span class="dots"></span></div>
 
 <header class="nav" id="nav">
   <div class="nav-in">
@@ -28,24 +30,33 @@
     </nav>
     <div class="nav-act">
       <a class="btn ghost sm" href="/app">Sign in</a>
-      <a class="btn sm" href="/app">Start selling</a>
+      <a class="btn sm" href="/app#signup">Start selling</a>
       <button class="burger" id="burger" type="button" aria-label="Open the menu" aria-expanded="false" aria-controls="sheet"><span></span><span></span></button>
     </div>
   </div>
   <div class="sheet" id="sheet">
     <a href="#demo">See your ad</a><a href="#how">How it works</a><a href="#games">Games</a><a href="#pricing">Pricing</a><a href="#questions">Questions</a>
-    <a href="/market">Find ad space</a><a href="/app">Sign in</a>
+    <a href="/market">Find ad space</a><a href="/app#signup">Make an account</a><a href="/app">Sign in</a>
   </div>
 </header>
 
 <main id="main">
   <section class="hero">
+    <div class="floaters" aria-hidden="true">
+      <div class="fl f1"><div class="mini mini-mail"><span class="mm-top"><i class="mm-av">B</i><span><b>The Brooklyn Brief</b><small>Tuesday edition</small></span></span><i class="ln"></i><i class="ln s"></i><span class="mm-ad"><i class="mm-pic">J</i><span><small>Sponsored</small><b>Juniper Coffee</b></span></span><i class="ln"></i></div></div>
+      <div class="fl f2"><div class="mini mini-board"><span class="mb-face"><i class="mb-pic">J</i><span><small>Sponsored</small><b>Juniper Coffee</b></span></span><span class="mb-posts"><i></i><i></i></span><span class="mb-car"></span></div></div>
+      <div class="fl f3"><div class="mini mini-chat"><span class="mc-msg"><i class="mc-av a1">M</i><span class="mc-b">Anyone doing anything Saturday?</span></span><span class="mc-msg"><i class="mc-av a2">T</i><span class="mc-b">Farmers market, then a walk.</span></span><span class="mm-ad"><i class="mm-pic">J</i><span><small>Sponsored</small><b>Juniper Coffee</b></span></span></div></div>
+      <div class="fl f4"><div class="mini toast money"><span class="t-ic">$</span><span><b>+$425.00</b><small>Paid out to your bank</small></span></div></div>
+      <div class="fl f5"><div class="mini toast seen"><span class="t-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="m3.5 8.5 3 3 6-7"/></svg></span><span><b>View counted</b><small>Half on screen, for a second</small></span></div></div>
+      <div class="fl f6"><div class="mini mini-ai"><span class="ai-q">Best brunch in Austin?</span><i class="ln"></i><i class="ln s"></i><span class="mm-ad"><i class="mm-pic">J</i><span><small>Sponsored</small><b>Juniper Coffee</b></span></span></div></div>
+      <div class="fl f7"><div class="mini toast approve"><span class="t-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="m3.5 8.5 3 3 6-7"/></svg></span><span><b>Ad approved</b><small>Smoke + Salt BBQ, 1 week</small></span></div></div>
+    </div>
     <div class="wrap">
       <p class="kicker rise"><span class="dot-live" aria-hidden="true"></span>Blogs, newsletters, games and chat</p>
       <h1 class="display rise" data-split>Ads that fit where&nbsp;they&nbsp;run.</h1>
       <p class="lede rise">Owners set the price and approve every ad. Brands book in minutes. Nobody gets tracked.</p>
       <div class="cta rise">
-        <a class="btn lg" href="/app">Start selling</a>
+        <a class="btn lg" href="/app#signup">Start selling</a>
         <a class="btn lg ghost" href="/market">Book an ad</a>
       </div>
       <dl class="stats rise">
@@ -53,6 +64,7 @@
         <div><dt>browser gamers a month</dt><dd data-count="100">100M+</dd></div>
         <div><dt>of all websites run WordPress</dt><dd data-count="40" data-unit="%">40%</dd></div>
       </dl>
+      <div class="fl-row" aria-hidden="true"><div class="fl-track"></div></div>
       <p class="src rise">Audiences Isoteh can reach. Sources: <a href="https://www.beehiiv.com/" rel="noopener">beehiiv</a>, <a href="https://poki.com/" rel="noopener">Poki</a>, <a href="https://w3techs.com/technologies/details/cm-wordpress" rel="noopener">W3Techs</a>.</p>
     </div>
   </section>
@@ -78,7 +90,7 @@
         <div class="stage" id="stage">
           <!-- newsletter -->
           <div class="scene on" id="sc-newsletter" role="tabpanel" aria-labelledby="t-newsletter">
-            <div class="mail">
+            <div class="mail"><div class="scroll">
               <div class="mail-top"><span class="av av-nl">B</span><span><b>The Brooklyn Brief</b><small>to you · 7:02 AM</small></span></div>
               <h3 class="mail-h">Five things worth knowing this Tuesday</h3>
               <p class="mail-p"><b>1. The F train runs again.</b> Weekend work on the Culver line is done early, so Saturday service is back to normal.</p>
@@ -86,13 +98,14 @@
               <div class="ad-slot" data-ad="email"></div>
               <p class="mail-p"><b>3. Prospect Park reopens its loop.</b> The paving is finished, and bikes and runners have both lanes back.</p>
               <p class="mail-p dim"><b>4. Library hours grow.</b> Six branches now open on Sunday mornings.</p>
-            </div>
+              <p class="mail-p dim"><b>5. Free concerts return.</b> The summer series in the park starts Friday at seven.</p>
+            </div></div>
           </div>
           <!-- blog -->
           <div class="scene" id="sc-blog" role="tabpanel" aria-labelledby="t-blog" hidden>
             <div class="blog">
               <div class="blog-bar"><span class="bdots" aria-hidden="true"><i></i><i></i><i></i></span><span class="url">austineats.example/brisket-before-noon</span></div>
-              <div class="blog-body">
+              <div class="blog-body"><div class="scroll">
                 <article>
                   <p class="b-cat">Barbecue</p>
                   <h3 class="b-h">Where to get brisket before noon</h3>
@@ -101,7 +114,9 @@
                   <p>Most pits in East Austin open at eleven and sell out by two. Three of them start slicing early, if you know which window to knock on.</p>
                   <div class="ad-slot" data-ad="native"></div>
                   <p class="dim">The first is a trailer behind a tire shop on Cesar Chavez. Bring cash and patience.</p>
+                  <p class="dim">The second sits next to a laundromat on Manor Road, and the third only opens on Saturdays.</p>
                 </article>
+              </div>
                 <aside><div class="ad-slot" data-ad="banner"></div><div class="side-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div></aside>
               </div>
             </div>
@@ -122,13 +137,14 @@
           <!-- game -->
           <div class="scene" id="sc-game" role="tabpanel" aria-labelledby="t-game" hidden>
             <div class="game">
-              <canvas id="game" aria-label="A street race passing a billboard with your ad"></canvas>
+              <video class="race" muted playsinline loop preload="none" poster="/a/agp-race.jpg" aria-label="Agent Grand Prix: cars race under a sponsor board sold through Isoteh">
+                <source src="/a/agp-race.mp4" type="video/mp4">
+              </video>
               <div class="hud">
-                <span class="hud-l"><b>Street race</b><small>a browser game</small></span>
-                <span class="meter" id="meter"><span class="m-bar"><i id="m-fill"></i></span><span id="m-text">Board off screen</span></span>
+                <span class="hud-l"><b>Agent Grand Prix</b><small>our own browser game</small></span>
+                <span class="meter" id="meter"><span class="m-bar"><i id="m-fill"></i></span><span id="m-text">Board coming up</span></span>
                 <span class="views"><b id="m-views">0</b><small>views counted</small></span>
               </div>
-              <div class="game-poster" id="game-poster"><div class="ad-slot" data-ad="board"></div><p>Your ad on a board inside the game</p></div>
             </div>
           </div>
         </div>
@@ -140,13 +156,15 @@
   <section class="strip" aria-label="Where Isoteh runs">
     <div class="wrap strip-in">
       <p>One ad network for</p>
-      <ul class="marq" aria-hidden="false">
-        <li>Blogs</li><li>Newsletters</li><li>Browser games</li><li>Public chat</li><li>AI answers</li><li>Creators</li>
-      </ul>
+      <div class="marq-wrap"><ul class="marq"><li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 4h12v12H4z"/><path d="M7 8h6M7 11h6M7 14h3"/></svg>Blogs</li><li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="14" height="10" rx="2"/><path d="m3.5 6 6.5 5 6.5-5"/></svg>Newsletters</li><li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2.5" y="6" width="15" height="9" rx="4.5"/><path d="M6.5 9v3M5 10.5h3"/><circle cx="13" cy="9.5" r=".6" fill="currentColor"/><circle cx="14.5" cy="11.5" r=".6" fill="currentColor"/></svg>Browser games</li><li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h12v8H9l-3.5 3v-3H4z"/></svg>Public chat</li><li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 3.5 11.6 8.4 16.5 10l-4.9 1.6L10 16.5l-1.6-4.9L3.5 10l4.9-1.6z"/></svg>AI answers</li><li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="7.5" r="3"/><path d="M4.5 16.5c.8-3 3-4.5 5.5-4.5s4.7 1.5 5.5 4.5"/></svg>Creators</li><li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="6" y="2.5" width="8" height="15" rx="2"/><path d="M9 15h2"/></svg>Apps</li></ul></div>
     </div>
   </section>
 
   <section class="how" id="how">
+    <div class="how-fx" aria-hidden="true"><div class="hf-in">
+      <svg class="flow" viewBox="0 0 1200 800" preserveAspectRatio="none"><path d="M-20 640 C 240 560, 380 700, 620 600 S 980 420, 1220 480"/><path d="M-20 700 C 280 640, 420 760, 680 660 S 1000 520, 1220 560"/><path d="M-20 580 C 200 500, 360 620, 600 520 S 960 360, 1220 400"/></svg>
+      <span class="coin c1">$</span><span class="coin c2">$</span><span class="coin c3">$</span><span class="coin c4">$</span><span class="coin c5">$</span><span class="coin c6">$</span>
+    </div></div>
     <div class="wrap">
       <h2 class="h2 rv">From empty space to money in&nbsp;the&nbsp;bank.</h2>
       <div class="pin">
@@ -176,42 +194,54 @@
     </div>
     <div class="rail" id="rail" tabindex="0" aria-label="Why owners pick Isoteh">
       <article class="tile">
-        <div class="viz v-track" aria-hidden="true"><span class="vt-row"><b>Views</b><em data-tick>12,406</em></span><span class="vt-row"><b>Clicks</b><em>318</em></span><span class="vt-row zero"><b>Reader profiles</b><em>0</em></span><span class="vt-row zero"><b>Cookies set</b><em>0</em></span></div>
+        <div class="viz v-track" aria-hidden="true"><span class="vt-scan"></span><span class="vt-row"><b>Views</b><em data-tick>12,406</em></span><span class="vt-row"><b>Clicks</b><em data-tick2>318</em></span><span class="vt-row zero"><b>Reader profiles</b><em>0</em></span><span class="vt-row zero"><b>Cookies set</b><em>0</em></span></div>
         <h3>We measure the ad, not the person</h3><p>No cookies on your readers, no profiles, no stored IPs.</p>
       </article>
       <article class="tile">
-        <div class="viz v-approve" aria-hidden="true"><span class="va-card"><span class="va-ad"></span><span class="va-l"><i></i><i></i></span></span><span class="va-btns"><span class="no">Decline</span><span class="yes">Approve</span></span></div>
+        <div class="viz v-approve" aria-hidden="true"><span class="va-card"><span class="va-ad"></span><span class="va-l"><i></i><i></i></span></span><span class="va-btns"><span class="no">Decline</span><span class="yes">Approve</span></span><span class="va-stamp">Approved</span><svg class="va-cur" viewBox="0 0 20 20"><path d="M4 2.5v13l3.4-3.2 2.4 5.2 2.2-1-2.4-5.1h4.6z" fill="#0b0d12" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
         <h3>Every ad waits for you</h3><p>Say no to any brand, any time. The money goes back to them.</p>
       </article>
       <article class="tile">
-        <div class="viz v-held" aria-hidden="true"><span class="vh-line"><i class="p1"></i><i class="p2"></i><i class="p3"></i></span><span class="vh-labels"><em>Paid</em><em>Running</em><em>Yours</em></span></div>
+        <div class="viz v-held" aria-hidden="true"><span class="vh-amt"><b class="a1">$500.00 held</b><b class="a2">$425.00 yours</b></span><span class="vh-line"><i class="p1"></i><i class="p2"></i><i class="p3"></i><span class="vh-coin">$</span></span><span class="vh-labels"><em>Paid</em><em>Running</em><em>Yours</em></span></div>
         <h3>Paid before it runs</h3><p>The brand pays up front. You never chase an invoice.</p>
       </article>
       <article class="tile">
-        <div class="viz v-small" aria-hidden="true"><span class="vs-n">300</span><span class="vs-l">readers is enough</span></div>
+        <div class="viz v-small" aria-hidden="true"><span class="vs-n" data-small>300</span><span class="vs-l">readers is enough</span><span class="vs-people"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
         <h3>No traffic minimum</h3><p>A small blog can list today and set its own price.</p>
       </article>
       <article class="tile">
-        <div class="viz v-ai" aria-hidden="true"><span class="vai-q"></span><span class="vai-a"><i></i><i></i><i></i></span><span class="vai-card">Sponsored</span></div>
+        <div class="viz v-ai" aria-hidden="true"><span class="vai-q">Where should we eat tonight?</span><span class="vai-a"><i></i><i></i><i></i></span><span class="vai-card"><i class="mm-pic">J</i><span><small>Sponsored</small><b>Juniper Coffee</b></span></span></div>
         <h3>Ready for AI chat</h3><p>One card under the answer, labelled, never in private chats.</p>
       </article>
     </div>
   </section>
 
   <section class="games" id="games" aria-labelledby="games-h">
+    <div class="games-glow" aria-hidden="true"></div>
     <div class="wrap games-in">
       <div class="games-copy">
         <h2 class="h2 rv" id="games-h">Real boards in browser&nbsp;games.</h2>
-        <p class="rv">Not a video that stops the game. A billboard in the world, priced by the indie developer who built it. Works with Three.js today. A view counts only when the board is half on screen, big enough to read, and seen for a second.</p>
-        <pre class="code rv" id="game-snippet"><span class="k">import</span> { AdBoard } <span class="k">from</span> <span class="s">'/s/isoteh-three.js'</span>;
-
+        <p class="rv">This is Agent Grand Prix, our own racing game, running live in a browser. The board over the straight is ad space. A brand books it, the developer approves it, and it shows up on the track, not in a video that stops the game.</p>
+        <ul class="g-points rv">
+          <li><b>Counted fairly.</b> A view counts only when the board is half on screen, big enough to read, for a second.</li>
+          <li><b>Priced by the developer.</b> By the day or the week, with 85% to them.</li>
+          <li><b>Two lines of code.</b> Works with Three.js today.</li>
+        </ul>
+        <div class="g-cta rv"><a class="btn lg inv" href="https://agentgrandprix.com" rel="noopener">Play Agent Grand Prix</a><a class="btn lg ghost inv" href="/app#signup">Sell boards in your game</a></div>
+      </div>
+      <div class="games-art rv">
+        <div class="tv">
+          <video class="race" muted playsinline loop preload="none" poster="/a/agp-race.jpg" aria-label="Agent Grand Prix race footage with a Juniper Coffee board over the straight">
+            <source src="/a/agp-race.mp4" type="video/mp4">
+          </video>
+          <span class="tv-live"><i></i>Live race</span>
+          <span class="tv-tag" id="tv-tag"><b>Juniper Coffee</b> board on the main straight</span>
+          <span class="tv-count" id="tv-count"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="m3.5 8.5 3 3 6-7"/></svg>View counted</span>
+        </div>
+        <pre class="code" id="game-snippet"><span class="k">import</span> { AdBoard } <span class="k">from</span> <span class="s">'/s/isoteh-three.js'</span>;
 <span class="k">const</span> board = <span class="k">new</span> AdBoard(THREE, { slot: <span class="s">'sl_your_slot'</span> });
 scene.add(board.mesh);
-<span class="c">// every frame: counts a view only when the board is readable</span>
-board.update(camera, renderer, dt);</pre>
-      </div>
-      <div class="games-art rv" aria-hidden="true">
-        <div class="board3d"><div class="b3-face"><div class="ad-slot" data-ad="board"></div></div><div class="b3-post"></div></div>
+board.update(camera, renderer, dt); <span class="c">// counts only readable views</span></pre>
       </div>
     </div>
   </section>
@@ -231,6 +261,7 @@ board.update(camera, renderer, dt);</pre>
           <div><dt>Isoteh fee</dt><dd id="o-fee">$75.00</dd></div>
           <div class="keep"><dt>You keep</dt><dd id="o-keep">$425.00</dd></div>
         </dl>
+        <div class="split" aria-hidden="true"><span class="sp-keep"><i>You 85%</i></span><span class="sp-fee"><i>15%</i></span></div>
       </div>
     </div>
   </section>
@@ -245,6 +276,8 @@ board.update(camera, renderer, dt);</pre>
         <div class="tr" role="row"><span role="rowheader">No cookies on your readers</span><span role="cell" class="y">Yes</span><span role="cell" class="n">No</span></div>
         <div class="tr" role="row"><span role="rowheader">No traffic minimum</span><span role="cell" class="y">Yes</span><span role="cell" class="n">Often not</span></div>
         <div class="tr" role="row"><span role="rowheader">Blogs, newsletters, games and chat</span><span role="cell" class="y">One dashboard</span><span role="cell" class="n">Websites only</span></div>
+        <div class="tr" role="row"><span role="rowheader">Paid before the ad runs</span><span role="cell" class="y">Yes</span><span role="cell" class="n">Paid a month or more later</span></div>
+        <div class="tr" role="row"><span role="rowheader">Sales counted without cookies</span><span role="cell" class="y">Yes</span><span role="cell" class="n">Needs tracking pixels</span></div>
       </div>
     </div>
   </section>
@@ -253,19 +286,27 @@ board.update(camera, renderer, dt);</pre>
     <div class="wrap faq-in">
       <h2 class="h2 rv" id="faq-h">Questions.</h2>
       <div class="qs">
-        <details><summary>When do I get paid?</summary><p>The brand pays when they book. We hold it while the ad runs, then 85% moves to your balance. Withdraw it to your bank or PayPal in US dollars.</p></details>
-        <details><summary>Does it work on Substack?</summary><p>Yes. On Substack you paste a ready-made ad block into the post. On tools that allow code, the ad drops in by itself. Clicks count either way.</p></details>
-        <details><summary>Which games can use it?</summary><p>Browser games built with Three.js today, with more engines to come. A view counts only when the board is really on screen and big enough to read.</p></details>
-        <details><summary>Will ads show in private chats?</summary><p>Never. Ads appear in public channels only, and always carry the Sponsored label.</p></details>
-        <details><summary>How do I start?</summary><p>Make a free account, list your space, and paste two lines where the ad should sit. WordPress has a plugin.</p></details>
+        <details><summary>When do I get paid?</summary><div class="ans"><p>The brand pays when they book. We hold the money while the ad runs, then 85% moves to your balance. Withdraw it to your bank or PayPal in US dollars.</p></div></details>
+        <details><summary>What does it cost to list my space?</summary><div class="ans"><p>Nothing. No monthly fee and no setup fee. Isoteh keeps 15% of each booking, and you keep the rest.</p></div></details>
+        <details><summary>Is there a traffic minimum?</summary><div class="ans"><p>No. A blog with a few hundred readers can list today. You set the price, and brands decide if it fits.</p></div></details>
+        <details><summary>Who decides which ads show?</summary><div class="ans"><p>You do. Every ad waits for your approval. Say no and the brand gets their money back.</p></div></details>
+        <details><summary>Does it work on Substack, beehiiv or Ghost?</summary><div class="ans"><p>Yes. On Substack you paste a ready-made ad block into the post. On tools that allow code, the ad drops in by itself. Clicks count either way.</p></div></details>
+        <details><summary>Which games can use it?</summary><div class="ans"><p>Browser games built with Three.js today, like our own Agent Grand Prix. More engines are coming. A view counts only when the board is really on screen and big enough to read.</p></div></details>
+        <details><summary>How do you count a view?</summary><div class="ans"><p>A view counts when half the ad is on screen for one second. Clicks are counted exactly. Nothing is stored about the person who saw it.</p></div></details>
+        <details><summary>Do you track my readers?</summary><div class="ans"><p>No. No cookies on your readers, no profiles, and no stored IP addresses. Ads are matched to the page and its topic, not to the person.</p></div></details>
+        <details><summary>How do brands see sales without tracking?</summary><div class="ans"><p>A click adds a short code to the brand’s link that names the ad and the day, never the person. The brand’s site or server sends back a sale with that code, and we count it against the ad.</p></div></details>
+        <details><summary>Will ads show in private chats?</summary><div class="ans"><p>Never. Ads appear in public channels and under AI answers only, and always carry the Sponsored label.</p></div></details>
+        <details><summary>What kinds of ads are allowed?</summary><div class="ans"><p>Images and plain text only. No scripts, no pop-ups, no autoplay sound. Every ad is checked before it can run.</p></div></details>
+        <details><summary>How do I start?</summary><div class="ans"><p>Make a free account, list your space, and paste two lines where the ad should sit. WordPress has a plugin. Brands can book from the marketplace right away.</p></div></details>
       </div>
     </div>
   </section>
 
   <section class="end">
+    <div class="end-fx" aria-hidden="true"><span class="ef e1">Sponsored</span><span class="ef e2">+$425.00</span><span class="ef e3">View counted</span><span class="ef e4">Ad approved</span><span class="ef e5">+$85.00</span><span class="ef e6">Sponsored</span><span class="ef e7">Paid out</span><span class="ef e8">+$1,700.00</span></div>
     <div class="wrap">
       <h2 class="display sm rv">Advertising on your&nbsp;terms.</h2>
-      <div class="cta rv"><a class="btn lg inv" href="/app">Start selling</a><a class="btn lg ghost inv" href="/market">Book an ad</a></div>
+      <div class="cta rv"><a class="btn lg inv" href="/app#signup">Start selling</a><a class="btn lg ghost inv" href="/market">Book an ad</a></div>
     </div>
   </section>
 </main>
@@ -273,7 +314,7 @@ board.update(camera, renderer, dt);</pre>
 <footer class="foot">
   <div class="wrap foot-in">
     <a class="wordmark" href="/"><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><rect x="5.5" y="5.5" width="5" height="5" rx="1" fill="currentColor"/></svg></span>Isoteh</a>
-    <nav aria-label="Footer"><a href="/market">Find ad space</a><a href="/app">Start selling</a><a href="#games">Games</a><a href="#pricing">Pricing</a><a href="/demo/index.html">Developer demo</a></nav>
+    <nav aria-label="Footer"><a href="/market">Find ad space</a><a href="/app#signup">Start selling</a><a href="#games">Games</a><a href="#pricing">Pricing</a><a href="/demo/index.html">Developer demo</a></nav>
     <p>Ads chosen by context, never by tracking people. Always labelled Sponsored.</p>
   </div>
 </footer>
