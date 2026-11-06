@@ -33,7 +33,7 @@
 
   // ---- reveal on scroll ----
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -12% 0px' });
-  $$('.rv, .games-art').forEach((el) => io.observe(el));
+  $$('.rv').forEach((el) => io.observe(el));
 
   // ---- the ad ----
   const DEFAULT = { name: 'Juniper Coffee', line: 'Small-batch beans roasted in Austin, at your door by Friday.', image: '', color: '#2f5d50', host: '', go: 'Shop the beans' };
@@ -60,7 +60,6 @@
     const la = $('.l-ad'), c = AD.color || colorFor(AD.name); if (la) { la.style.setProperty('--ad', c); la.style.setProperty('--ad-ink', lum(c) > 0.45 ? '#0b0d12' : '#fbfbf8'); }
     $$('.va-ad').forEach((v) => v.style.setProperty('--ad', c));
     if (chatShown) chatSpon();
-    game?.board(AD);
   }
 
   // ---- see my ad ----
@@ -106,24 +105,71 @@
     $$('.scene').forEach((s) => { const on = s.id === `sc-${name}`; s.classList.toggle('on', on); s.hidden = !on; });
     cap.textContent = CAPS[name]; placeInd();
     if (name === 'chat') chatStart();
-    if (name === 'game') gameStart(); else game?.pause();
+    if (name === 'game') gameStart(); else gamePause();
+    sceneFx(name);
   }
   tabs.forEach((t, i) => {
     t.addEventListener('click', () => { touched = true; show(t.dataset.s); stopAuto(); });
     t.addEventListener('keydown', (e) => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (d) { e.preventDefault(); touched = true; show(tabs[(i + d + tabs.length) % tabs.length].dataset.s, true); stopAuto(); } });
   });
   addEventListener('resize', placeInd); document.fonts?.ready.then(placeInd); placeInd();
-  // walk through the four scenes on its own until someone touches the tabs
-  let auto = null;
-  const stopAuto = () => { clearInterval(auto); auto = null; };
-  const stageObs = new IntersectionObserver(([e]) => {
-    if (reduce) return;
-    if (e.isIntersecting && auto === null && !touched) auto = setInterval(() => { const n = tabs.findIndex((t) => t.dataset.s === current); show(tabs[(n + 1) % tabs.length].dataset.s); }, current === 'game' ? 9000 : 6500);
-    if (!e.isIntersecting) stopAuto();
-  }, { threshold: 0.5 });
+  // walk through the four scenes on its own until someone touches the tabs; a line under the tab shows the time left
+  const DUR = { newsletter: 8000, blog: 8000, chat: 7000, game: 7600 };
+  tabs.forEach((t) => t.append(el('i', 'tp')));
+  let auto = null, inView = false;
+  const runBar = () => tabs.forEach((t) => { t.classList.remove('run'); if (auto !== null && t.dataset.s === current) { void t.offsetWidth; t.style.setProperty('--dur', `${DUR[current]}ms`); t.classList.add('run'); } });
+  const stopAuto = () => { clearTimeout(auto); auto = null; runBar(); };
+  const queue = () => { clearTimeout(auto); if (reduce || touched || !inView) { auto = null; runBar(); return; } auto = setTimeout(() => { const n = tabs.findIndex((t) => t.dataset.s === current); show(tabs[(n + 1) % tabs.length].dataset.s); queue(); }, DUR[current]); runBar(); };
+  const stageObs = new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (inView && auto === null) queue(); if (!inView) stopAuto(); }, { threshold: 0.45 });
   stageObs.observe($('#stage'));
   [site, $('#stage')].forEach((x) => x.addEventListener('pointerdown', () => { touched = true; stopAuto(); }));
   site.addEventListener('focus', () => { touched = true; stopAuto(); });
+
+  // ---- the stage comes alive: a pointer clicks the ad, and notes pop up beside it ----
+  const stage = $('#stage');
+  const svg = (d, w = 1.8) => `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="${w}">${d}</svg>`;
+  const ICON = {
+    check: svg('<path d="m3.5 8.5 3 3 6-7"/>', 2.2),
+    eye: svg('<path d="M1.5 8s2.5-4.5 6.5-4.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8Z"/><circle cx="8" cy="8" r="2"/>'),
+    lock: svg('<rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/>'),
+    tag: svg('<path d="M2 8.5V3h5.5L14 9.5 8.5 15z"/><circle cx="5" cy="6" r="1"/>'),
+  };
+  const NOTES = {
+    newsletter: [['l1', 'tag', 'Labelled Sponsored, always'], ['r1', 'eye', 'View counted: half on screen, 1 second', 'green'], ['l2', 'lock', 'No cookies, no reader profiles'], ['r2', 'check', 'Click counted', 'green']],
+    blog: [['l1', 'tag', 'You pick which spots to sell'], ['r1', 'eye', 'Two views counted', 'green'], ['l2', 'lock', 'Matched to the article, not the reader'], ['r2', 'check', 'Click counted', 'green']],
+    chat: [['l1', 'lock', 'Public channels only, never private'], ['r1', 'tag', 'One card, clearly labelled'], ['r2', 'check', 'Click counted', 'green']],
+    game: [['l1', 'tag', 'A real board on the track'], ['r1', 'eye', 'Counted when readable for a second', 'green'], ['l2', 'lock', 'Priced by the developer']],
+  };
+  const chipsBox = stage.appendChild(el('div', 'chips-fx'));
+  chipsBox.setAttribute('aria-hidden', 'true');
+  const cursor = stage.appendChild(el('span', 'cursor'));
+  cursor.innerHTML = '<svg viewBox="0 0 20 20" width="22" height="22"><path d="M4 2.5v13l3.4-3.2 2.4 5.2 2.2-1-2.4-5.1h4.6z" fill="#0b0d12" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>';
+  let fxTimers = [], cursorAnim = null;
+  function sceneFx(name) {
+    fxTimers.forEach(clearTimeout); fxTimers = []; cursorAnim?.cancel(); cursor.style.opacity = '0';
+    chipsBox.replaceChildren();
+    const notes = (NOTES[name] || []).map(([pos, icon, text, tone]) => { const c = el('span', `cfx ${pos}${tone ? ' ' + tone : ''}`); const i = el('span', 'ci'); i.innerHTML = ICON[icon]; c.append(i, el('span', '', text)); chipsBox.append(c); return [pos, c]; });
+    if (reduce) { notes.forEach(([, c]) => c.classList.add('on')); return; }
+    const later = (ms, f) => fxTimers.push(setTimeout(f, ms));
+    notes.filter(([p]) => p !== 'r2').forEach(([, c], i) => later(700 + i * 900, () => c.classList.add('on')));
+    const click = notes.find(([p]) => p === 'r2');
+    if (!click) return;
+    // the pointer drifts in and taps the ad
+    later(name === 'chat' ? 4300 : 3600, () => {
+      const ad = $(`#sc-${name} .ad`); if (!ad) return;
+      const sr = stage.getBoundingClientRect(), ar = ad.getBoundingClientRect();
+      if (ar.bottom > sr.bottom - 10 || ar.top < sr.top) return;
+      const x = ar.left - sr.left + Math.min(ar.width * 0.7, ar.width - 30), y = ar.top - sr.top + ar.height * 0.6;
+      cursor.style.opacity = '1';
+      cursorAnim = cursor.animate([{ transform: `translate(${sr.width * 0.92}px, ${sr.height * 0.95}px)`, opacity: 0 }, { opacity: 1, offset: 0.2 }, { transform: `translate(${x}px, ${y}px)`, opacity: 1 }], { duration: 1300, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+      cursorAnim.onfinish = () => {
+        cursor.classList.remove('tap'); void cursor.offsetWidth; cursor.classList.add('tap');
+        ad.classList.remove('press'); void ad.offsetWidth; ad.classList.add('press');
+        click[1].classList.add('on');
+        later(1400, () => { cursorAnim = cursor.animate([{ transform: `translate(${x}px, ${y}px)`, opacity: 1 }, { transform: `translate(${x}px, ${y}px)`, opacity: 0 }], { duration: 400, fill: 'forwards' }); });
+      };
+    });
+  }
 
   // ---- chat ----
   const msgs = $('#msgs'), aiA = $('#ai-a');
@@ -159,144 +205,38 @@
     stopAuto();
   }));
 
-  // ---- game: a small street race with a real board ----
-  let game = null, gameLoading = false;
-  const threeUrl = () => { const s = document.getElementById('three-src'); return s ? URL.createObjectURL(new Blob([s.textContent], { type: 'text/javascript' })) : '/a/three.module.min.js'; };
-  async function gameStart() {
-    if (game) return game.play();
-    if (gameLoading) return;
-    const box = $('.game');
-    const gl = (() => { try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; } })();
-    if (reduce || !gl) { box.classList.add('static'); return; }
-    gameLoading = true;
-    try { const THREE = await import(threeUrl()); game = makeGame(THREE, box); game.board(AD); if (current === 'game') game.play(); }
-    catch (err) { console.warn('game preview', err); box.classList.add('static'); }
-    gameLoading = false;
+  // ---- game: our own race, Agent Grand Prix, with a board sold through Isoteh ----
+  // the clip is 7 s: the board comes into view at 4 s, is readable from 5 s, and is passed at 6.4 s
+  const BOARD = { inView: 4.0, readable: 5.0, counted: 6.0 };
+  $$('video.race').forEach((v) => { v.muted = true; v.defaultMuted = true; });
+  let gameOn = false, views = 0, lastT = 0, gameRaf = 0;
+  const fill = $('#m-fill'), mtext = $('#m-text'), mviews = $('#m-views'), meter = $('#meter');
+  const gv = $('.game video');
+  function meterFrame() {
+    gameRaf = gameOn ? requestAnimationFrame(meterFrame) : 0;
+    const t = gv.currentTime;
+    if (lastT < BOARD.counted && t >= BOARD.counted) { views++; mviews.textContent = views.toLocaleString('en-US'); }
+    lastT = t;
+    const k = t < BOARD.readable ? 0 : Math.min(1, (t - BOARD.readable) / (BOARD.counted - BOARD.readable));
+    fill.style.width = `${Math.round(k * 100)}%`;
+    meter.classList.toggle('count', t >= BOARD.counted);
+    mtext.textContent = t >= BOARD.counted ? 'View counted' : t >= BOARD.readable ? `Counting ${(t - BOARD.readable).toFixed(1)}s` : t >= BOARD.inView ? 'Too small to read yet' : 'Board coming up';
   }
-
-  function makeGame(THREE, box) {
-    const canvas = $('#game', box), fill = $('#m-fill'), mtext = $('#m-text'), mviews = $('#m-views'), meter = $('#meter');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: !lite, powerPreference: 'low-power' });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, lite ? 1.5 : 2));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    const scene = new THREE.Scene(), sky = new THREE.Color('#c9d6ea');
-    scene.background = sky; scene.fog = new THREE.Fog(sky, 60, 190);
-    const camera = new THREE.PerspectiveCamera(58, 1, 0.1, 400);
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x7d8f6a, 1.6));
-    const sun = new THREE.DirectionalLight(0xfff4e0, 1.6); sun.position.set(-40, 60, 20); scene.add(sun);
-    const mat = (c) => new THREE.MeshLambertMaterial({ color: c });
-    const R = 46, W = 10;   // track radius and width
-    const ground = new THREE.Mesh(new THREE.CircleGeometry(220, 64), mat('#a7b88f')); ground.rotation.x = -Math.PI / 2; scene.add(ground);
-    const road = new THREE.Mesh(new THREE.RingGeometry(R - W / 2, R + W / 2, 160, 1), mat('#454b57')); road.rotation.x = -Math.PI / 2; road.position.y = 0.02; scene.add(road);
-    const dummy = new THREE.Object3D();
-    const ring = (n, r, geo, colorAt, y = 0) => {
-      const m = new THREE.InstancedMesh(geo, new THREE.MeshLambertMaterial(), n);
-      for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2; dummy.position.set(Math.cos(a) * r, y, Math.sin(a) * r); dummy.rotation.set(0, -a, 0); dummy.updateMatrix(); m.setMatrixAt(i, dummy.matrix); m.setColorAt(i, new THREE.Color(colorAt(i))); }
-      scene.add(m); return m;
-    };
-    ring(90, R, new THREE.BoxGeometry(0.25, 0.04, 1.6), (i) => (i % 2 ? '#454b57' : '#f4f1e8'), 0.04);
-    ring(120, R - W / 2 - 0.4, new THREE.BoxGeometry(0.8, 0.12, 2.4), (i) => (i % 2 ? '#e8e4da' : '#c8323c'), 0.06);
-    ring(120, R + W / 2 + 0.4, new THREE.BoxGeometry(0.8, 0.12, 2.4), (i) => (i % 2 ? '#e8e4da' : '#c8323c'), 0.06);
-    // town outside the track, trees inside
-    const rnd = (() => { let s = 7; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
-    const bGeo = new THREE.BoxGeometry(1, 1, 1); bGeo.translate(0, 0.5, 0);
-    const blocks = new THREE.InstancedMesh(bGeo, new THREE.MeshLambertMaterial(), 70), tones = ['#e9e3d6', '#d9dde6', '#f1ece2', '#c9d2dd', '#e6d6c3', '#dfe5ea'];
-    for (let i = 0; i < 70; i++) { const a = rnd() * Math.PI * 2, r = R + 24 + rnd() * 50; dummy.position.set(Math.cos(a) * r, 0, Math.sin(a) * r); dummy.rotation.set(0, rnd() * Math.PI, 0); dummy.scale.set(6 + rnd() * 8, 4 + rnd() * 14, 6 + rnd() * 8); dummy.updateMatrix(); blocks.setMatrixAt(i, dummy.matrix); blocks.setColorAt(i, new THREE.Color(tones[i % tones.length])); }
-    dummy.scale.set(1, 1, 1); scene.add(blocks);
-    const cone = new THREE.ConeGeometry(1.6, 4.5, 7); cone.translate(0, 3.6, 0);
-    const trees = new THREE.InstancedMesh(cone, mat('#4f7a52'), 60);
-    for (let i = 0; i < 60; i++) { const a = rnd() * Math.PI * 2, r = 8 + rnd() * (R - W / 2 - 12); dummy.position.set(Math.cos(a) * r, 0, Math.sin(a) * r); const s = 0.7 + rnd() * 0.7; dummy.scale.set(s, s, s); dummy.rotation.set(0, 0, 0); dummy.updateMatrix(); trees.setMatrixAt(i, dummy.matrix); }
-    dummy.scale.set(1, 1, 1); scene.add(trees);
-    // the billboard, just outside the track, turned toward oncoming cars
-    const BW = 12, BH = 6, ba = Math.PI * 0.18, br = R + W / 2 + 7;
-    const board = new THREE.Group(); board.position.set(Math.cos(ba) * br, 0, Math.sin(ba) * br);
-    const tex = document.createElement('canvas'); tex.width = 1024; tex.height = 512;
-    const texture = new THREE.CanvasTexture(tex); texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4;
-    const face = new THREE.Mesh(new THREE.PlaneGeometry(BW, BH), new THREE.MeshBasicMaterial({ map: texture, toneMapped: false })); face.position.y = 5 + BH / 2;
-    const rim = new THREE.Mesh(new THREE.BoxGeometry(BW + 0.6, BH + 0.6, 0.4), mat('#1d222d')); rim.position.set(0, face.position.y, -0.22);
-    [-BW / 3, BW / 3].forEach((x) => { const p = new THREE.Mesh(new THREE.BoxGeometry(0.5, 5.2, 0.5), mat('#2a303d')); p.position.set(x, 2.6, -0.3); board.add(p); });
-    board.add(rim, face); scene.add(board);
-    const aim = ba - 0.42; board.lookAt(Math.cos(aim) * R, 0, Math.sin(aim) * R);
-    // cars
-    const car = (body) => {
-      const g = new THREE.Group();
-      const b = new THREE.Mesh(new THREE.BoxGeometry(2, 0.7, 4.2), mat(body)); b.position.y = 0.65;
-      const c = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.55, 1.9), mat('#1b2029')); c.position.set(0, 1.25, -0.2);
-      const wg = new THREE.CylinderGeometry(0.42, 0.42, 0.36, 12); wg.rotateZ(Math.PI / 2);
-      [[-1, 1.4], [1, 1.4], [-1, -1.4], [1, -1.4]].forEach(([x, z]) => { const w = new THREE.Mesh(wg, mat('#111318')); w.position.set(x, 0.42, z); g.add(w); });
-      g.add(b, c); scene.add(g); return g;
-    };
-    const me = car('#f4f1e8'), rivals = [{ g: car('#3a5bff'), a: 0.35, r: R - 2.2, v: 0.165 }, { g: car('#c8323c'), a: -0.5, r: R + 2.2, v: 0.15 }];
-    const place = (g, a, r) => { g.position.set(Math.cos(a) * r, 0, Math.sin(a) * r); g.rotation.y = -a; };
-
-    // the board's ad
-    function drawBoard(ad) {
-      const x = tex.getContext('2d'), w = tex.width, h = tex.height, c = ad.color || colorFor(ad.name), split = Math.round(w * 0.4);
-      x.fillStyle = '#fefefe'; x.fillRect(0, 0, w, h);
-      x.fillStyle = c; x.fillRect(0, 0, split, h);
-      x.fillStyle = lum(c) > 0.45 ? '#0b0d12' : '#fbfbf8'; x.font = '600 220px Geist, system-ui, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
-      x.fillText(ad.name.trim()[0]?.toUpperCase() ?? '•', split / 2, h / 2 + 10);
-      x.textAlign = 'left'; x.textBaseline = 'alphabetic';
-      x.fillStyle = '#7a8090'; x.font = '500 30px Geist, system-ui, sans-serif'; x.fillText('Sponsored', split + 48, 84);
-      x.fillStyle = '#0b0d12'; let size = 84; x.font = `600 ${size}px Geist, system-ui, sans-serif`;
-      while (x.measureText(ad.name).width > w - split - 96 && size > 40) { size -= 4; x.font = `600 ${size}px Geist, system-ui, sans-serif`; }
-      x.fillText(ad.name, split + 48, 84 + size + 20);
-      x.fillStyle = '#454b58'; x.font = '400 36px Geist, system-ui, sans-serif';
-      const words = (ad.line || `Find out more at ${ad.host}`).split(' '); let line = '', y = 84 + size + 92, n = 0;
-      for (const wd of words) { const t = line ? `${line} ${wd}` : wd; if (x.measureText(t).width > w - split - 96) { x.fillText(line, split + 48, y); y += 48; line = wd; if (++n === 3) break; } else line = t; }
-      if (n < 3 && line) x.fillText(line, split + 48, y);
-      texture.needsUpdate = true;
-    }
-
-    // what the player sees, by the same rules the game kit counts with
-    const RULES = { minVisible: 0.5, minShare: 0.015, maxAngle: 55, seconds: 1 };
-    const pts = []; for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) pts.push(new THREE.Vector3((i / 3 - 0.5) * BW, (j / 3 - 0.5) * BH, 0));
-    const v = new THREE.Vector3(), n = new THREE.Vector3(), toCam = new THREE.Vector3();
-    let seen = 0, counted = false, views = 0;
-    function measure(dt) {
-      face.updateMatrixWorld();
-      let inside = 0; for (const p of pts) { v.copy(p).applyMatrix4(face.matrixWorld).project(camera); if (v.z < 1 && Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1) inside++; }
-      const vis = inside / pts.length;
-      const corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => v.set(a * BW / 2, b * BH / 2, 0).applyMatrix4(face.matrixWorld).project(camera).clone());
-      let area = 0; for (let i = 0; i < 4; i++) { const p = corners[i], q = corners[(i + 1) % 4]; area += p.x * q.y - q.x * p.y; }
-      const share = corners.every((c) => c.z < 1) ? Math.min(1, Math.abs(area / 2) / 4) : 0;
-      n.set(0, 0, 1).transformDirection(face.matrixWorld); face.getWorldPosition(v); toCam.copy(camera.position).sub(v).normalize();
-      const angle = THREE.MathUtils.radToDeg(Math.acos(Math.min(1, Math.max(-1, n.dot(toCam)))));
-      const ok = vis >= RULES.minVisible && share >= RULES.minShare && angle <= RULES.maxAngle;
-      if (ok) seen += dt; else { seen = 0; if (vis < 0.05) counted = false; }
-      if (ok && seen >= RULES.seconds && !counted) { counted = true; views++; mviews.textContent = views.toLocaleString('en-US'); }
-      fill.style.width = `${Math.round((counted ? 1 : Math.min(1, seen / RULES.seconds)) * 100)}%`;
-      meter.classList.toggle('count', counted);
-      mtext.textContent = counted ? 'View counted' : vis < RULES.minVisible ? (vis > 0 ? `${Math.round(vis * 100)}% on screen` : 'Board off screen') : share < RULES.minShare ? 'Too small to read yet' : angle > RULES.maxAngle ? 'Seen at too steep an angle' : `Counting ${seen.toFixed(1)}s`;
-    }
-
-    // drive
-    let a = ba - 1.6, running = false, last = 0, raf = 0, visible = true;
-    const resize = () => { const w = box.clientWidth, h = box.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w / h < 0.9 ? 72 : 58; camera.updateProjectionMatrix(); };
-    new ResizeObserver(resize).observe(box); resize();
-    const look = new THREE.Vector3();
-    function frame(t) {
-      raf = requestAnimationFrame(frame);
-      const dt = Math.min(0.05, (t - (last || t)) / 1000); last = t;
-      a += dt * 0.16;
-      place(me, a, R + 1.6);
-      rivals.forEach((r) => { r.a += dt * r.v; place(r.g, r.a, r.r); });
-      const back = a - 0.16, ahead = a + 0.22;
-      camera.position.set(Math.cos(back) * (R + 0.4), 4.2, Math.sin(back) * (R + 0.4));
-      look.set(Math.cos(ahead) * (R + 2.5), 1.8, Math.sin(ahead) * (R + 2.5)); camera.lookAt(look);
-      measure(dt);
-      renderer.render(scene, camera);
-    }
-    const vo = new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); }); vo.observe(box);
-    document.addEventListener('visibilitychange', () => sync());
-    function sync() { const go = running && visible && !document.hidden; if (go && !raf) { last = 0; raf = requestAnimationFrame(frame); } else if (!go && raf) { cancelAnimationFrame(raf); raf = 0; } }
-    // a first frame so the scene isn't empty before it starts
-    place(me, a, R + 1.6); rivals.forEach((r) => place(r.g, r.a, r.r));
-    return {
-      play() { running = true; resize(); sync(); },
-      pause() { running = false; sync(); },
-      board(ad) { (document.fonts?.ready ?? Promise.resolve()).then(() => drawBoard(ad)); },
-    };
+  function gameStart() {
+    gameOn = true;
+    if (reduce) { mtext.textContent = 'Board on the main straight'; return; }
+    gv.preload = 'auto';
+    try { gv.currentTime = 0; } catch {}
+    lastT = 0;
+    gv.play().catch(() => {});
+    if (!gameRaf) gameRaf = requestAnimationFrame(meterFrame);
+  }
+  function gamePause() { gameOn = false; gv.pause(); }
+  // the big screen in the games section plays while it is on screen
+  const tv = $('.tv video'), tvCount = $('#tv-count');
+  if (tv) {
+    new IntersectionObserver(([e]) => { if (reduce) return; if (e.isIntersecting) { tv.preload = 'auto'; tv.play().catch(() => {}); } else tv.pause(); }, { threshold: 0.35 }).observe(tv);
+    tv.addEventListener('timeupdate', () => tvCount.classList.toggle('on', tv.currentTime >= BOARD.counted - 0.1));
   }
 
   // ---- how it works: the cutaway follows the steps ----
@@ -329,6 +269,48 @@
   $$('.tile').forEach((t) => to.observe(t));
   let ticks = 12406; const tick = $('[data-tick]');
   if (!reduce) setInterval(() => { ticks += 1 + Math.floor(Math.random() * 4); tick.textContent = ticks.toLocaleString('en-US'); }, 1300);
+
+  // ---- hero: cards float with the scroll; on smaller screens they ride a belt under the numbers ----
+  const fls = $$('.floaters .fl');
+  if (!reduce && fls.length) {
+    const speed = [0.18, -0.12, 0.26, 0.1, -0.2, 0.14, -0.08];
+    let ticking = false;
+    const par = () => { ticking = false; const y = scrollY; if (y > innerHeight * 1.5) return; fls.forEach((f, i) => f.style.setProperty('--py', (y * speed[i % speed.length]).toFixed(1))); };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(par); } }, { passive: true });
+  }
+  const track = $('.fl-track');
+  if (track) { const minis = $$('.floaters .mini').map((m) => m.cloneNode(true)); track.append(...minis, ...minis.map((m) => m.cloneNode(true))); }
+
+  // ---- the strip: a belt that never ends ----
+  const marq = $('.strip .marq');
+  if (marq) marq.append(...[...marq.children].map((li) => { const c = li.cloneNode(true); c.setAttribute('aria-hidden', 'true'); return c; }));
+
+  // ---- how: a line beside the steps fills as you scroll ----
+  const stepsEl = $('.steps');
+  const stepLine = () => { const r = pin.getBoundingClientRect(), span = r.height - innerHeight * 0.4; stepsEl.style.setProperty('--p', Math.min(1, Math.max(0, (innerHeight * 0.5 - r.top) / span)).toFixed(3)); };
+  addEventListener('scroll', stepLine, { passive: true }); stepLine();
+
+  // ---- why: the panels play while the rail is on screen ----
+  new IntersectionObserver(([e]) => rail.classList.toggle('play', e.isIntersecting && !reduce), { threshold: 0.2 }).observe(rail);
+  let clicks = 318; const tick2 = $('[data-tick2]');
+  if (!reduce) setInterval(() => { if (Math.random() < 0.45) { clicks += 1; tick2.textContent = clicks.toLocaleString('en-US'); } }, 1300);
+  const small = $('[data-small]');
+  if (small && !reduce) {
+    let t0 = 0;
+    const run = (t) => { if (!rail.classList.contains('play')) { t0 = 0; return requestAnimationFrame(run); } t0 ||= t; const k = ((t - t0) % 4000) / 4000, e = Math.min(1, k / 0.45); small.textContent = Math.round(300 * (1 - (1 - e) ** 3)); requestAnimationFrame(run); };
+    requestAnimationFrame(run);
+  }
+
+  // ---- questions open and close smoothly ----
+  $$('.qs details').forEach((d) => {
+    const sum = $('summary', d), ans = $('.ans', d);
+    sum.addEventListener('click', (e) => {
+      if (reduce) return;
+      e.preventDefault();
+      if (d.open) { const h = ans.offsetHeight; ans.animate([{ height: `${h}px`, opacity: 1 }, { height: '0px', opacity: 0 }], { duration: 320, easing: 'cubic-bezier(.4,0,.2,1)' }).onfinish = () => { d.open = false; }; }
+      else { d.open = true; const h = ans.offsetHeight; ans.animate([{ height: '0px', opacity: 0 }, { height: `${h}px`, opacity: 1 }], { duration: 380, easing: 'cubic-bezier(.2,.7,.1,1)' }); }
+    });
+  });
 
   // ---- calculator ----
   const pin2 = $('#price-in');
