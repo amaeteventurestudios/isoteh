@@ -389,7 +389,7 @@ summary::after { background: linear-gradient(var(--ink), var(--ink)) center / 12
 .bg-fx .dots { opacity: .35; }
 
 /* the side menu, on wide screens */
-.side { position: fixed; right: 20px; top: 50%; z-index: 20; display: none; flex-direction: column; align-items: flex-end; gap: 12px; padding: 16px 14px; border-radius: 16px; background: color-mix(in srgb, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transform: translateY(-50%); opacity: 0; pointer-events: none; transition: opacity .5s var(--ease); }
+.side { position: fixed; right: 20px; top: 50%; z-index: 20; display: none; flex-direction: column; align-items: flex-end; gap: 12px; padding: 16px 14px; transform: translateY(-50%); opacity: 0; pointer-events: none; transition: opacity .5s var(--ease); }
 .side.show { opacity: 1; pointer-events: auto; }
 .side a { position: relative; font-size: 14px; color: var(--mute); text-decoration: none; padding-right: 0; transition: color .25s, padding-right .35s var(--ease); }
 .side a::after { content: ""; position: absolute; right: 0; top: 50%; width: 0; height: 1.5px; background: var(--ink); transition: width .35s var(--ease); }
@@ -509,3 +509,8 @@ summary::after { background: linear-gradient(var(--ink), var(--ink)) center / 12
   .cmp-head { justify-content: center; text-align: center; } .cmp-head > div { justify-items: center; } .cmp-head p { margin-inline: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .bg-fx .topo, .cr .c0::before { animation: none; } }
+
+/* the owners rail fades out at both edges, so cards slip away under the side menu instead of being covered */
+.rail { --fade: max(28px, calc((100vw - var(--wrap)) / 2 + var(--gut))); -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent calc(var(--fade) * .3), #000 var(--fade), #000 calc(100% - var(--fade)), transparent calc(100% - var(--fade) * .3), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, transparent calc(var(--fade) * .3), #000 var(--fade), #000 calc(100% - var(--fade)), transparent calc(100% - var(--fade) * .3), transparent 100%); }
+@media (max-width: 52rem) { .rail { --fade: 16px; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fade), #000 calc(100% - 40px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--fade), #000 calc(100% - 40px), transparent 100%); } }
+.arr { transition: border-color .2s, transform .2s var(--ease), opacity .3s var(--ease); }
