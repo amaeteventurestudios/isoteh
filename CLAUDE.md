@@ -13,6 +13,8 @@ plug into it like any customer. Read `docs/HANDOFF.md` first.
 - Never serve ads in private chats (`ctx=private`). Every ad shows the label "Sponsored".
 - Public content never mentions USG companies or Palasora's private plans. Real place names are fine; businesses in demos
   are invented.
+- The dashboard in `web/` is the one exception to "no dependencies": React, shadcn/ui, Tailwind and Tabler icons at
+  build time only. Rebuild with `cd web && npx vite build` and commit `public/app/`.
 - Phone-first: check the dashboard at 390×844 and 1280×800, light and dark.
 
 ## Testing

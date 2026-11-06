@@ -47,7 +47,10 @@ websites, newsletters, apps and games in one place, and in-world game ads are so
 | `lib/creatives.mjs` | Checking and storing ad images |
 | `lib/snippets.mjs` | The code an owner pastes, per kind of place |
 | `lib/app.mjs` | Every web address |
-| `public/` | The dashboard and public pages (no framework) |
+| `lib/workspace.mjs` | Organizations, team and invites, account settings, two-step sign-in, ad groups, audiences, lists, events (conversions), overview numbers, support tickets, Slack |
+| `web/` | The signed-in dashboard at `/app` (React, shadcn/ui, Tailwind, Tabler icons). Built into `public/app/`, which is committed |
+| `public/` | Public pages and the older pages still used for `/market` and `/book/:id` |
+| `sdk/isoteh-events.js` | The tracking tag served at `/s/isoteh-events.js` (counts visits and sales after an ad click, no cookies) |
 | `sdk/web/isoteh.js` | The website script |
 | `sdk/native/isoteh-native.mjs` | Native cards for apps and Jisst |
 | `sdk/game/isoteh-game.mjs`, `isoteh-three.mjs` | In-game ads: the view rules, and a Three.js billboard |
@@ -59,12 +62,24 @@ Money: whole minor units (cents) with an ISO currency; never a hard-coded symbol
 of rows that sums to zero across accounts (people's ids plus `escrow`, `platform`, `payouts_pending`, `outside`); the
 tests check the whole ledger sums to zero.
 
+## The dashboard (`web/`)
+Edit the React source in `web/src`, then rebuild: `cd web && npm install && npx tsc -b && npx vite build`. The build
+writes `public/app/`; commit it, because the server never builds anything. For live editing run the server on port
+8401 and `npx vite` in `web/` (it proxies `/v1`). Colour is terracotta (`--brand`, `--primary` in `web/src/index.css`).
+The dashboard has an Advertiser and a Publisher mode (the org switcher), and every page from the Gravity-style layout:
+Dashboard, Campaigns (campaigns, ad groups, ads), Events Manager, Audiences, Settings (account, team, organization,
+billing), plus Places, Bookings, Earnings, Reports and staff Review.
+
+Conversions without tracking people: a click adds `isoteh_ref` to the ad's link, signed and the same for everyone who
+clicked that ad that day. The tag or a server (`POST /v1/events` with the organization key) sends events with it.
+Audiences are context only (topics, countries, kinds of place, sites); lists hold sites or topics, never emails.
+
 ## Server
 `.github/workflows/deploy.yml` tests every push. Deploying needs the repository variable `DEPLOY_ENABLED=yes` and the
 same three secrets the games use (`SERVER_HOST`, `SERVER_USER`, `SERVER_SSH_KEY`). `deploy/install.sh` then installs
 service `isoteh` on 127.0.0.1:8400 with data in `/var/lib/isoteh`, nightly backups in `/var/backups/isoteh`, a Caddy site
-file, and the spare address `ads.129-146-26-28.sslip.io`. Set the variable `ADS_DOMAIN` once a real name points at the
-server. In production nobody becomes administrator by signing up first: set the secret `ISOTEH_ADMIN_EMAIL`, or run
+file, and the spare address `ads.129-146-26-28.sslip.io`. The live address is `isoteh.amaete.com` for now (Amaete Venture Studios, not Noveniqe), deployed by the
+`isoteh-deploy.yml` workflow in the noveniqe repo; move it when Isoteh has its own domain. In production nobody becomes administrator by signing up first: set the secret `ISOTEH_ADMIN_EMAIL`, or run
 `tools/grant.mjs <email> admin` on the server.
 
 ## Not done yet (next steps)
