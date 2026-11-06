@@ -24,6 +24,7 @@ const head = (title, desc, path, css, wiki = false) => `<!doctype html>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${SITE.url}${path}">
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${SITE.url}${path}">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Isoteh"><meta property="og:image" content="${SITE.url}/a/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Isoteh: advertising on your terms. Set your price, approve every ad, keep 85%."><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${SITE.url}/a/og.jpg">
 <meta name="theme-color" content="#fbfbfc">
 ${ICON}
 ${FONTS}
