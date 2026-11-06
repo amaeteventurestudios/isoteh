@@ -572,3 +572,31 @@ summary::after { background: linear-gradient(var(--ink), var(--ink)) center / 12
 .foot-base a { color: var(--dark-mute); text-decoration: none; } .foot-base a:hover { color: var(--dark-ink); }
 @media (max-width: 64rem) { .foot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .foot-brand { grid-column: 1 / -1; } }
 @media (max-width: 40rem) { .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; } }
+
+/* how it works on phones: a bigger stack, the cards above the step lift away and fade so the step's card reads,
+   and each new card pops forward as its step arrives */
+@media (max-width: 40rem) {
+  .pin-art { height: 60svh; }
+  .js .steps { top: calc(var(--nav) + 60svh); height: 32svh; }
+  .js .pin { height: 340svh; }
+  .cut-scale { transform: translateY(18%) scale(.58); }
+  .cut { --gap: 58px; --lift: 210px; }
+  .cut .layer { transition: transform .9s var(--ease), opacity .6s var(--ease), border-color .4s; }
+  .cut.focus .layer.above { opacity: .14; }
+  .cut.focus .layer:not(.on):not(.above) > * { opacity: .55; }
+  .cut.focus .layer.on { transform: translateZ(calc(var(--i) * var(--gap) + 60px)); box-shadow: 0 30px 50px -24px #0b0d1266; }
+  .cut.focus .layer.on.l-pay { box-shadow: 0 40px 60px -26px #0b0d12aa; }
+  .cut.focus .layer.on > * { animation: ph-in .7s var(--ease) both; }
+  .cut.focus .layer.on { animation: ph-pop .8s var(--ease); }
+  .cut-scale { animation: ph-bob 5s ease-in-out infinite alternate; }
+  .js .steps li { transform: translateY(26px); transition: opacity .55s var(--ease), transform .7s var(--ease); }
+  .js .steps li h3 { transition: transform .7s var(--ease); }
+  .js .steps li p { opacity: 0; transform: translateY(10px); transition: opacity .6s var(--ease) .12s, transform .7s var(--ease) .12s; }
+  .js .steps li.on p { opacity: 1; transform: none; }
+  .js .steps li::before { display: inline-block; padding: 3px 9px; border: 1px solid var(--line-2); border-radius: 999px; justify-self: center; }
+  .js .steps li.on::before { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+}
+@keyframes ph-pop { 0% { scale: .92; } 55% { scale: 1.05; } 100% { scale: 1; } }
+@keyframes ph-in { from { opacity: .2; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+@keyframes ph-bob { from { translate: 0 -6px; } to { translate: 0 6px; } }
+@media (prefers-reduced-motion: reduce) { .cut.focus .layer.on, .cut.focus .layer.on > *, .cut-scale { animation: none; } }
