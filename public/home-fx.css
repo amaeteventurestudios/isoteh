@@ -514,3 +514,48 @@ summary::after { background: linear-gradient(var(--ink), var(--ink)) center / 12
 .rail { --fade: max(28px, calc((100vw - var(--wrap)) / 2 + var(--gut))); -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent calc(var(--fade) * .3), #000 var(--fade), #000 calc(100% - var(--fade)), transparent calc(100% - var(--fade) * .3), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, transparent calc(var(--fade) * .3), #000 var(--fade), #000 calc(100% - var(--fade)), transparent calc(100% - var(--fade) * .3), transparent 100%); }
 @media (max-width: 52rem) { .rail { --fade: 16px; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fade), #000 calc(100% - 40px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--fade), #000 calc(100% - 40px), transparent 100%); } }
 .arr { transition: border-color .2s, transform .2s var(--ease), opacity .3s var(--ease); }
+
+/* how it works: every layer carries something real; the last one is the money arriving */
+.cut.focus .layer > * { opacity: .5; }
+.cut.focus .layer.on > * { opacity: 1; }
+.cut.focus .layer.l-pay > * { opacity: .75; }
+.cut.focus .layer.l-pay.on > * { opacity: 1; }
+.l-count .lc-rows { display: flex; gap: 8px; margin-top: 4px; }
+.l-count .lc-rows span { display: inline-flex; gap: 6px; align-items: baseline; padding: 4px 9px; border-radius: 999px; background: var(--card); border: 1px solid var(--line-2); font: 12.5px var(--mono); color: var(--ink); }
+.l-count .lc-rows b { font: 500 11.5px var(--sans); color: var(--mute); }
+.l-held { justify-content: space-between; }
+.l-held .lh-top { display: flex; justify-content: space-between; align-items: center; }
+.l-held .lh-chip { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 999px; background: var(--card); border: 1px solid var(--line-2); font-size: 12.5px; color: var(--ink); }
+.l-held .lh-chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
+.l-held .lock { width: 38px; height: 38px; color: var(--ink); background: var(--card); }
+.l-held .tag { margin-top: auto; }
+.l-held .lh-bar { height: 6px; border-radius: 3px; background: var(--line-2); overflow: hidden; }
+.l-held .lh-bar i { display: block; height: 100%; width: 57%; border-radius: 3px; background: var(--ink); transform-origin: left; }
+.l-held.on .lh-bar i { animation: lh-grow 1.6s var(--ease) both; }
+@keyframes lh-grow { from { transform: scaleX(.15); } }
+.l-held .lh-days { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--mute); }
+.layer.l-pay { background: #0b0d12; border-color: #0b0d12; color: #c9ccd4; justify-content: space-between; box-shadow: 0 40px 60px -30px #0b0d1299; }
+.l-pay .lp-top { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.l-pay .lp-bank { width: 34px; height: 34px; border-radius: 9px; background: #ffffff14; color: #fff; display: grid; place-items: center; }
+.l-pay .lp-top b { display: block; color: #fff; font-size: 14px; font-weight: 500; }
+.l-pay .lp-top small { display: block; color: #9aa1b0; font-size: 12px; }
+.l-pay .lp-top em { font-style: normal; font-size: 12px; color: #fff; padding: 4px 10px; border-radius: 999px; background: #ffffff14; white-space: nowrap; }
+.layer.l-pay .big { color: #fff; font-size: 40px; margin-top: auto; }
+.l-pay .lp-split { display: flex; gap: 3px; height: 8px; }
+.l-pay .lp-split i { display: block; border-radius: 3px; }
+.l-pay .lp-split .you { flex: 85; background: #fff; } .l-pay .lp-split .fee { flex: 15; background: #5b6170; }
+.l-pay .lp-key { display: flex; justify-content: space-between; font-size: 12.5px; color: #9aa1b0; }
+.l-pay .lp-key span { display: inline-flex; align-items: center; gap: 6px; }
+.l-pay .lp-key i { width: 8px; height: 8px; border-radius: 2px; } .l-pay .lp-key .you { background: #fff; } .l-pay .lp-key .fee { background: #5b6170; }
+.l-pay.on .lp-split .you { animation: lp-fill 1.2s var(--ease) both; transform-origin: left; }
+@keyframes lp-fill { from { transform: scaleX(0); } }
+@media (max-width: 64rem) {
+  .l-count .lc-rows span, .l-held .lh-chip, .l-held .lh-days, .l-pay .lp-key, .l-pay .lp-top em, .l-pay .lp-top small { font-size: 20px; }
+  .l-count .lc-rows b { font-size: 18px; }
+  .l-pay .lp-top b { font-size: 22px; }
+  .l-pay .lp-top { grid-template-columns: 48px minmax(0, 1fr) auto; }
+  .l-pay .lp-bank, .l-held .lock { width: 48px; height: 48px; }
+  .layer.l-pay .big { font-size: 56px; }
+  .l-held .lh-bar, .l-pay .lp-split { height: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .l-held.on .lh-bar i, .l-pay.on .lp-split .you { animation: none; } }
