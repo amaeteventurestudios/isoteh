@@ -43,6 +43,13 @@ if [ -f /tmp/isoteh-keys.env ]; then
   rm -f /tmp/isoteh-keys.env
 fi
 
+# Google and email-code sign-in through the studio's shared accounts: the core's deploy makes this client's secret.
+OXF=/etc/novenique/clients/isoteh.env
+if sudo test -f "$OXF"; then
+  OX=$(sudo sed -n 's/^NOVENIQUE_CLIENT_SECRET=//p' "$OXF" | head -1)
+  [ -n "$OX" ] && setkv ONYX_CLIENT_SECRET "$OX"
+fi
+
 sudo tee /etc/systemd/system/isoteh.service >/dev/null <<UNIT
 [Unit]
 Description=Isoteh ad server

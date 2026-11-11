@@ -74,6 +74,14 @@ Conversions without tracking people: a click adds `isoteh_ref` to the ad's link,
 clicked that ad that day. The tag or a server (`POST /v1/events` with the organization key) sends events with it.
 Audiences are context only (topics, countries, kinds of place, sites); lists hold sites or topics, never emails.
 
+## Sign-in through the studio's shared accounts (`lib/onyx.mjs`)
+Continue with Google or a six-digit email code, on Isoteh's own sign-in page; password sign-in stays as the fallback.
+The shared accounts service proves who the person is and shares their verified email; Isoteh finds the account by that
+id, then by email, or makes one (sign-up rules and the admin email still apply), and starts its own session.
+Authenticator codes still apply. The first time an older password account is linked, its password is replaced, because
+Isoteh never proved who made it. Switched on by `ONYX_CLIENT_SECRET` in `/etc/isoteh/isoteh.env`, which
+`deploy/install.sh` copies from the client file the accounts service's deploy makes. Off without it.
+
 ## Server
 `.github/workflows/deploy.yml` tests every push. Deploying needs the repository variable `DEPLOY_ENABLED=yes` and the
 same three secrets the games use (`SERVER_HOST`, `SERVER_USER`, `SERVER_SSH_KEY`). `deploy/install.sh` then installs
