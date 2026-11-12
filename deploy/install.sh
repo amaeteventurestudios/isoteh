@@ -87,14 +87,14 @@ sudo chmod 755 /etc/cron.daily/isoteh-backup
 
 # the shared Caddy: one site file of our own
 if [ -d /etc/caddy/sites ]; then
-  # Browser safety headers on every answer. "?" only fills in a header the app has not set itself (the app's own
-  # Content-Security-Policy on its pages stays), so nothing here can block the dashboard, the ad scripts or the images.
+  # Browser safety headers the app does not send itself (it already sends nosniff and Referrer-Policy). Caddy's "?"
+  # defaults don't apply to proxied answers, so these are set outright. Where the app sends its own stricter
+  # Content-Security-Policy, browsers enforce both; this one only switches off plugins, stops other sites framing the
+  # pages and keeps requests on https, so it never blocks the dashboard, the ad scripts or the images.
   SAFE='header {
-    ?Strict-Transport-Security "max-age=31536000"
-    ?Content-Security-Policy "object-src '"'none'"'; base-uri '"'self'"'; frame-ancestors '"'self'"'; upgrade-insecure-requests"
-    ?X-Frame-Options SAMEORIGIN
-    ?X-Content-Type-Options nosniff
-    ?Referrer-Policy strict-origin-when-cross-origin
+    Strict-Transport-Security "max-age=31536000"
+    Content-Security-Policy "object-src '"'none'"'; base-uri '"'self'"'; frame-ancestors '"'self'"'; upgrade-insecure-requests"
+    X-Frame-Options SAMEORIGIN
   }'
   [ -f /etc/caddy/sites/isoteh.caddy ] && sudo cp /etc/caddy/sites/isoteh.caddy /tmp/isoteh.caddy.bak
   printf '%s {\n  encode gzip\n  %s\n  reverse_proxy 127.0.0.1:%s\n}\n' "$(IFS=,; echo "${NAMES[*]}" | sed 's/,/, /g')" "$SAFE" "$PORT" | sudo tee /etc/caddy/sites/isoteh.caddy >/dev/null
