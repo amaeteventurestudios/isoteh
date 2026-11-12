@@ -87,7 +87,22 @@ sudo chmod 755 /etc/cron.daily/isoteh-backup
 
 # the shared Caddy: one site file of our own
 if [ -d /etc/caddy/sites ]; then
-  printf '%s {\n  encode gzip\n  reverse_proxy 127.0.0.1:%s\n}\n' "$(IFS=,; echo "${NAMES[*]}" | sed 's/,/, /g')" "$PORT" | sudo tee /etc/caddy/sites/isoteh.caddy >/dev/null
+  # Browser safety headers on every answer. "?" only fills in a header the app has not set itself (the app's own
+  # Content-Security-Policy on its pages stays), so nothing here can block the dashboard, the ad scripts or the images.
+  SAFE='header {
+    ?Strict-Transport-Security "max-age=31536000"
+    ?Content-Security-Policy "object-src '"'none'"'; base-uri '"'self'"'; frame-ancestors '"'self'"'; upgrade-insecure-requests"
+    ?X-Frame-Options SAMEORIGIN
+    ?X-Content-Type-Options nosniff
+    ?Referrer-Policy strict-origin-when-cross-origin
+  }'
+  [ -f /etc/caddy/sites/isoteh.caddy ] && sudo cp /etc/caddy/sites/isoteh.caddy /tmp/isoteh.caddy.bak
+  printf '%s {\n  encode gzip\n  %s\n  reverse_proxy 127.0.0.1:%s\n}\n' "$(IFS=,; echo "${NAMES[*]}" | sed 's/,/, /g')" "$SAFE" "$PORT" | sudo tee /etc/caddy/sites/isoteh.caddy >/dev/null
+  # never leave a broken file behind: every site on the server shares this Caddy
+  if ! sudo /usr/local/bin/caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile >/dev/null 2>&1; then
+    if [ -f /tmp/isoteh.caddy.bak ]; then sudo cp /tmp/isoteh.caddy.bak /etc/caddy/sites/isoteh.caddy; else sudo rm -f /etc/caddy/sites/isoteh.caddy; fi
+    echo '::warning::The new Isoteh site file did not validate; the previous one is back in place.'
+  fi
   sudo systemctl reload caddy || true
 fi
 
